@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Веста — Хранительница вашего дома</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-inner">
+            <a href="#" class="logo">
+                <div class="logo-icon">🏠</div>
+                <div class="logo-text">
+                    <span class="logo-name">Веста</span>
+                    <span class="logo-sub">хранительница дома</span>
+                </div>
+            </a>
+            <button class="burger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+            <nav class="nav" id="mainNav">
+                <a href="#problems">Проблемы</a>
+                <a href="#objects">Мой объект</a>
+                <a href="#legal">Нормативная база</a>
+                <a href="#news">Новости</a>
+                <a href="#" class="btn-login" onclick="openModal('loginModal')">Личный кабинет</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="top-section">
+        <div class="top-left">
+            <div class="search-area">
+                <div class="search-badge">Бесплатный сервис для граждан</div>
+                <div class="search-greeting">
+                    <h1>Защитим ваш <span>домашний очаг!</span></h1>
+                    <p>Готовые решения проблем ЖКХ, образцы документов и нормативная база</p>
+                </div>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Опишите проблему: «течёт крыша», «мусор не вывозят»..." onkeypress="if(event.key==='Enter')performSearch()">
+                    <button onclick="performSearch()">Найти решение</button>
+                </div>
+                <div class="search-hints">
+                    <span class="search-hint" onclick="setSearch('Задолженность за коммуналку')">Задолженность</span>
+                    <span class="search-hint" onclick="setSearch('Мусор не вывозят')">Вывоз мусора</span>
+                    <span class="search-hint" onclick="setSearch('Течь в крыше')">Течь в крыше</span>
+                    <span class="search-hint" onclick="setSearch('Перерасчёт за отопление')">Перерасчёт</span>
+                    <span class="search-hint" onclick="setSearch('УК не отчитывается')">Отчёт УК</span>
+                </div>
+            </div>
+            <div class="objects-area" id="objects">
+                <div class="objects-label">Выберите объект</div>
+                <div class="objects-row">
+                    <div class="object-card" data-obj="house" onclick="selectObject(this, 'house')">
+                        <div class="object-emoji">🏘️</div>
+                        <h3>Дом</h3>
+                        <div class="object-tags">
+                            <span class="object-tag">Капремонт</span>
+                            <span class="object-tag">УК</span>
+                            <span class="object-tag">Двор</span>
+                        </div>
+                    </div>
+                    <div class="object-card" data-obj="apartment" onclick="selectObject(this, 'apartment')">
+                        <div class="object-emoji">🚪</div>
+                        <h3>Квартира</h3>
+                        <div class="object-tags">
+                            <span class="object-tag">Платежи</span>
+                            <span class="object-tag">Права</span>
+                            <span class="object-tag">Налоги</span>
+                        </div>
+                    </div>
+                    <div class="object-card" data-obj="entrance" onclick="selectObject(this, 'entrance')">
+                        <div class="object-emoji">🏢</div>
+                        <h3>Подъезд</h3>
+                        <div class="object-tags">
+                            <span class="object-tag">Соседи</span>
+                            <span class="object-tag">Имущество</span>
+                            <span class="object-tag">Ремонт</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="top-right">
+            <div class="news-area" id="news">
+                <div class="news-header">
+                    <h3>📰 Новости</h3>
+                    <a href="#">Все →</a>
+                </div>
+                <div class="news-list">
+                    <div class="news-item">
+                        <div class="news-date">12 июля 2025</div>
+                        <h4>Новые правила капремонта с 1 сентября</h4>
+                        <span class="news-tag">Законы</span>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-date">8 июля 2025</div>
+                        <h4>Тарифы на коммуналку: что изменилось</h4>
+                        <span class="news-tag">Тарифы</span>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-date">3 июля 2025</div>
+                        <h4>ГИС ЖКХ: новые возможности</h4>
+                        <span class="news-tag">Сервисы</span>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-date">28 июня 2025</div>
+                        <h4>Штрафы для УК увеличены</h4>
+                        <span class="news-tag">Законы</span>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-date">22 июня 2025</div>
+                        <h4>Как проверить начисления за ЖКУ</h4>
+                        <span class="news-tag">Инструкции</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problems-section" id="problems">
+        <div class="section-divider">
+            <h2>Частые проблемы</h2>
+        </div>
+
+        <div id="objectFilterBadge" class="object-filter-badge">
+            <span id="objectFilterText"></span>
+            <button class="clear-filter" onclick="clearObjectFilter()">✕</button>
+        </div>
+
+        <div class="problems-toolbar">
+            <p>Выберите ситуацию — мы подскажем пошаговое решение</p>
+            <div class="problems-filter" id="categoryFilter">
+                <button class="filter-btn active" onclick="filterByCategory('all', this)">Все</button>
+                <button class="filter-btn" onclick="filterByCategory('payment', this)">Платежи</button>
+                <button class="filter-btn" onclick="filterByCategory('repair', this)">Ремонт</button>
+                <button class="filter-btn" onclick="filterByCategory('uk', this)">УК</button>
+                <button class="filter-btn" onclick="filterByCategory('services', this)">Услуги</button>
+            </div>
+        </div>
+
+        <div class="problems-grid" id="problemsGrid">
+            <!-- Дом -->
+            <div class="problem-card" data-cat="repair" data-obj="house" onclick="openProblem('roof')">
+                <div class="problem-icon">🏚️</div>
+                <h3>Течь в крыше</h3>
+                <p>Куда обращаться и как добиться ремонта</p>
+                <span class="problem-obj-tag house">Дом</span>
+            </div>
+            <div class="problem-card" data-cat="services" data-obj="house" onclick="openProblem('trash')">
+                <div class="problem-icon">🗑️</div>
+                <h3>Мусор не вывозят</h3>
+                <p>Порядок обращения в УК и контролирующие органы</p>
+                <span class="problem-obj-tag house">Дом</span>
+            </div>
+            <div class="problem-card" data-cat="uk" data-obj="house" onclick="openProblem('uk')">
+                <div class="problem-icon">📋</div>
+                <h3>УК не отчитывается</h3>
+                <p>Право на информацию и порядок запроса</p>
+                <span class="problem-obj-tag house">Дом</span>
+            </div>
+            <div class="problem-card" data-cat="services" data-obj="house" onclick="openProblem('yard')">
+                <div class="problem-icon">🌨️</div>
+                <h3>Снег и грязь во дворе</h3>
+                <p>Обязанности УК по содержанию территории</p>
+                <span class="problem-obj-tag house">Дом</span>
+            </div>
+
+            <!-- Квартира -->
+            <div class="problem-card" data-cat="payment" data-obj="apartment" onclick="openProblem('debt')">
+                <div class="problem-icon">💰</div>
+                <h3>Задолженность за коммуналку</h3>
+                <p>Как оспорить начисления и избежать отключения</p>
+                <span class="problem-obj-tag apartment">Квартира</span>
+            </div>
+            <div class="problem-card" data-cat="services" data-obj="apartment" onclick="openProblem('water')">
+                <div class="problem-icon">🚿</div>
+                <h3>Нет горячей воды</h3>
+                <p>Сроки отключения и перерасчёт</p>
+                <span class="problem-obj-tag apartment">Квартира</span>
+            </div>
+            <div class="problem-card" data-cat="payment" data-obj="apartment" onclick="openProblem('heating')">
+                <div class="problem-icon">🌡️</div>
+                <h3>Перерасчёт за отопление</h3>
+                <p>Когда можно требовать и как оформить</p>
+                <span class="problem-obj-tag apartment">Квартира</span>
+            </div>
+
+            <!-- Подъезд -->
+            <div class="problem-card" data-cat="repair" data-obj="entrance" onclick="openProblem('repair_e')">
+                <div class="problem-icon">🔧</div>
+                <h3>Плохой ремонт подъезда</h3>
+                <p>Как заставить УК выполнить обязательства</p>
+                <span class="problem-obj-tag entrance">Подъезд</span>
+            </div>
+            <div class="problem-card" data-cat="uk" data-obj="entrance" onclick="openProblem('neighbors')">
+                <div class="problem-icon">🤝</div>
+                <h3>Споры с соседями</h3>
+                <p>Шум, затопление, общее имущество</p>
+                <span class="problem-obj-tag entrance">Подъезд</span>
+            </div>
+
+            <div class="no-results" id="noResults">
+                <div class="emoji">🔍</div>
+                <p>Нет проблем в этой категории.<br>Попробуйте другой фильтр.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="bottom-section" id="legal">
+        <div class="legal-compact">
+            <h3>📚 Нормативная база</h3>
+            <div class="legal-list">
+                <div class="legal-item"><div class="legal-item-icon">⚖️</div><div><h4>Судебная практика</h4><p>Решения судов по спорам ЖКХ</p></div></div>
+                <div class="legal-item"><div class="legal-item-icon">📄</div><div><h4>Образцы документов</h4><p>Заявления, жалобы, претензии</p></div></div>
+                <div class="legal-item"><div class="legal-item-icon">🏛️</div><div><h4>Куда обращаться</h4><p>ГЖИ, прокуратура, суд</p></div></div>
+                <div class="legal-item"><div class="legal-item-icon">📖</div><div><h4>Законы и кодексы</h4><p>ЖК РФ, ПП №354, ПП №491</p></div></div>
+            </div>
+        </div>
+        <div class="calendar-compact">
+            <h3>📅 Июль 2025 <div class="cal-nav-btns"><button>‹</button><button>›</button></div></h3>
+            <div class="cal-grid">
+                <div class="cal-dn">Пн</div><div class="cal-dn">Вт</div><div class="cal-dn">Ср</div>
+                <div class="cal-dn">Чт</div><div class="cal-dn">Пт</div><div class="cal-dn">Сб</div><div class="cal-dn">Вс</div>
+                <div class="cal-d muted">30</div><div class="cal-d">1</div><div class="cal-d">2</div><div class="cal-d">3</div>
+                <div class="cal-d">4</div><div class="cal-d">5</div><div class="cal-d">6</div>
+                <div class="cal-d">7</div><div class="cal-d">8</div><div class="cal-d">9</div>
+                <div class="cal-d has-event">10</div><div class="cal-d">11</div><div class="cal-d">12</div><div class="cal-d">13</div>
+                <div class="cal-d">14</div><div class="cal-d today">15</div><div class="cal-d">16</div>
+                <div class="cal-d">17</div><div class="cal-d">18</div><div class="cal-d">19</div>
+                <div class="cal-d has-event">20</div><div class="cal-d">21</div><div class="cal-d">22</div><div class="cal-d">23</div>
+                <div class="cal-d">24</div><div class="cal-d has-event">25</div><div class="cal-d">26</div><div class="cal-d">27</div>
+                <div class="cal-d">28</div><div class="cal-d">29</div><div class="cal-d">30</div><div class="cal-d">31</div>
+                <div class="cal-d muted">1</div><div class="cal-d muted">2</div><div class="cal-d muted">3</div>
+            </div>
+            <div class="cal-events-list">
+                <div class="cal-ev"><div class="cal-ev-dot red"></div><div><h4>Оплата ЖКУ</h4><p>До 10 июля</p></div></div>
+                <div class="cal-ev"><div class="cal-ev-dot blue"></div><div><h4>Собрание жильцов</h4><p>20 июля, 18:00</p></div></div>
+                <div class="cal-ev"><div class="cal-ev-dot green"></div><div><h4>Поверка счётчиков</h4><p>25 июля</p></div></div>
+            </div>
+        </div>
+        <div class="cta-compact">
+            <h3>💬 Не нашли ответ?</h3>
+            <p>Опишите ситуацию — подберём решение, документы и подскажем, куда обращаться</p>
+            <button class="btn-cta" onclick="openModal('questionModal')">✉ Задать вопрос</button>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="logo" style="margin-bottom:0.2rem;">
+                    <div class="logo-icon">🛡️</div>
+                    <div class="logo-text"><span class="logo-name">Веста</span><span class="logo-sub">хранительница дома</span></div>
+                </div>
+                <p>Бесплатный информационный сервис для граждан в сфере ЖКХ. Как древняя богиня Веста хранила домашний очаг, так и мы помогаем защитить ваш дом.</p>
+            </div>
+            <div><h4>Разделы</h4><ul><li><a href="#problems">Проблемы</a></li><li><a href="#objects">Мой объект</a></li><li><a href="#legal">Нормативная база</a></li><li><a href="#news">Новости</a></li></ul></div>
+            <div><h4>Документы</h4><ul><li><a href="#">Образцы заявлений</a></li><li><a href="#">Судебная практика</a></li><li><a href="#">Законы и кодексы</a></li></ul></div>
+            <div><h4>Сервис</h4><ul><li><a href="#">О проекте</a></li><li><a href="#">FAQ</a></li><li><a href="#">Обратная связь</a></li><li><a href="#">Конфиденциальность</a></li></ul></div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Веста — Информационный сервис ЖКХ</p>
+            <div class="footer-bottom-links"><a href="#">Политика конфиденциальности</a><a href="#">Соглашение</a></div>
+        </div>
+    </footer>
+
+    <!-- Модалки -->
+    <div class="modal-overlay" id="loginModal"><div class="modal">
+        <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+        <h2>🔐 Вход в личный кабинет</h2>
+        <div class="form-group"><label>Email</label><input type="email" placeholder="example@mail.ru"></div>
+        <div class="form-group"><label>Пароль</label><input type="password" placeholder="Введите пароль"></div>
+        <button class="btn-submit">Войти</button>
+        <div style="text-align:center;margin-top:0.7rem;font-size:0.83rem;">
+            <a href="#" style="color:var(--primary);font-weight:600;">Регистрация</a>
+            <span style="margin:0 0.5rem;color:#ddd;">|</span>
+            <a href="#" style="color:var(--text-light);">Через Госуслуги</a>
+        </div>
+    </div></div>
+
+    <div class="modal-overlay" id="questionModal"><div class="modal">
+        <button class="modal-close" onclick="closeModal('questionModal')">✕</button>
+        <h2>💬 Задать вопрос</h2>
+        <div class="form-group"><label>Имя</label><input type="text" placeholder="Иван Иванов"></div>
+        <div class="form-group"><label>Email</label><input type="email" placeholder="example@mail.ru"></div>
+        <div class="form-group"><label>Категория</label><select><option>Выберите...</option><option>Задолженность</option><option>Ремонт</option><option>УК</option><option>Услуги</option><option>Другое</option></select></div>
+        <div class="form-group"><label>Опишите проблему</label><textarea placeholder="Подробно опишите ситуацию..."></textarea></div>
+        <button class="btn-submit">Отправить</button>
+    </div></div>
+
+    <div class="modal-overlay" id="problemModal"><div class="modal" style="max-width:600px;">
+        <button class="modal-close" onclick="closeModal('problemModal')">✕</button>
+        <div id="problemContent"></div>
+    </div></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
