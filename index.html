@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Веста — Хранительница вашего дома</title>
+    <title>Веста</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -13,19 +13,34 @@
     <header class="header">
         <div class="header-inner">
             <a href="#" class="logo">
-                <div class="logo-icon">🏠</div>
+                <div class="logo-text">
+                    <div class="logo-icon" aria-hidden="true">
+                        <svg width="72" height="72" viewBox="0 0 72 72" class="logo-icon-svg">
+                            <image href="logo.png" class="logo-icon-img" width="72" height="72" preserveAspectRatio="xMidYMid slice"/>
+                        </svg>
+                    </div>
+                </div>
                 <div class="logo-text">
                     <span class="logo-name">Веста</span>
-                    <span class="logo-sub">хранительница дома</span>
+                    <span class="logo-sub">Хранительница дома</span>
                 </div>
             </a>
             <button class="burger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
             <nav class="nav" id="mainNav">
-                <a href="#problems">Проблемы</a>
-                <a href="#objects">Мой объект</a>
-                <a href="#legal">Нормативная база</a>
-                <a href="#news">Новости</a>
-                <a href="#" class="btn-login" onclick="openModal('loginModal')">Личный кабинет</a>
+                <div class="account-widget" id="accountWidget">
+                    <button type="button" class="account-trigger" id="authTrigger" aria-haspopup="menu" aria-expanded="false" aria-label="Войти в аккаунт">
+                        <span class="account-icon" aria-hidden="true">
+                            <svg class="account-icon-svg" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="8" r="3.6" stroke="currentColor" stroke-width="1.8"></circle>
+                                <path d="M5.2 18.3c1.3-3.1 3.8-4.6 6.8-4.6s5.5 1.5 6.8 4.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                            </svg>
+                        </span>
+                        <span class="account-dot" aria-hidden="true"></span>
+                    </button>
+                    <div class="account-popover" id="accountPopover" role="menu" aria-label="Меню аккаунта">
+                        <button type="button" class="account-menu-btn" id="logoutBtn" role="menuitem">Выйти из аккаунта</button>
+                    </div>
+                </div>
             </nav>
         </div>
     </header>
@@ -33,28 +48,22 @@
     <section class="top-section">
         <div class="top-left">
             <div class="search-area">
-                <div class="search-badge">Бесплатный сервис для граждан</div>
                 <div class="search-greeting">
-                    <h1>Защитим ваш <span>домашний очаг!</span></h1>
-                    <p>Готовые решения проблем ЖКХ, образцы документов и нормативная база</p>
+                    <h1>Порядок в доме <span>начинается здесь!</span></h1>
+                    <p>Полезные советы по ЖКХ, документы и нормативная база без лишней сложности</p>
                 </div>
                 <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Опишите проблему: «течёт крыша», «мусор не вывозят»..." onkeypress="if(event.key==='Enter')performSearch()">
-                    <button onclick="performSearch()">Найти решение</button>
-                </div>
-                <div class="search-hints">
-                    <span class="search-hint" onclick="setSearch('Задолженность за коммуналку')">Задолженность</span>
-                    <span class="search-hint" onclick="setSearch('Мусор не вывозят')">Вывоз мусора</span>
-                    <span class="search-hint" onclick="setSearch('Течь в крыше')">Течь в крыше</span>
-                    <span class="search-hint" onclick="setSearch('Перерасчёт за отопление')">Перерасчёт</span>
-                    <span class="search-hint" onclick="setSearch('УК не отчитывается')">Отчёт УК</span>
+                    <input type="text" id="searchInput" name="problem_query" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" placeholder="Найдите совет: «перерасчёт», «горячая вода», «крыша»..." onkeypress="if(event.key==='Enter')performSearch()">
+                    <button onclick="performSearch()">Найти совет</button>
                 </div>
             </div>
             <div class="objects-area" id="objects">
                 <div class="objects-label">Выберите объект</div>
                 <div class="objects-row">
                     <div class="object-card" data-obj="house" onclick="selectObject(this, 'house')">
-                        <div class="object-emoji">🏘️</div>
+                        <div class="object-emoji" aria-hidden="true">
+                            <img src="logo_home.png" alt="" class="object-logo-img">
+                        </div>
                         <h3>Дом</h3>
                         <div class="object-tags">
                             <span class="object-tag">Капремонт</span>
@@ -62,22 +71,26 @@
                             <span class="object-tag">Двор</span>
                         </div>
                     </div>
-                    <div class="object-card" data-obj="apartment" onclick="selectObject(this, 'apartment')">
-                        <div class="object-emoji">🚪</div>
-                        <h3>Квартира</h3>
-                        <div class="object-tags">
-                            <span class="object-tag">Платежи</span>
-                            <span class="object-tag">Права</span>
-                            <span class="object-tag">Налоги</span>
-                        </div>
-                    </div>
                     <div class="object-card" data-obj="entrance" onclick="selectObject(this, 'entrance')">
-                        <div class="object-emoji">🏢</div>
+                        <div class="object-emoji" aria-hidden="true">
+                            <img src="logo_entrance.png" alt="" class="object-logo-img">
+                        </div>
                         <h3>Подъезд</h3>
                         <div class="object-tags">
                             <span class="object-tag">Соседи</span>
                             <span class="object-tag">Имущество</span>
                             <span class="object-tag">Ремонт</span>
+                        </div>
+                    </div>
+                    <div class="object-card" data-obj="apartment" onclick="selectObject(this, 'apartment')">
+                        <div class="object-emoji" aria-hidden="true">
+                            <img src="logo_apart.png" alt="" class="object-logo-img">
+                        </div>
+                        <h3>Квартира</h3>
+                        <div class="object-tags">
+                            <span class="object-tag">Платежи</span>
+                            <span class="object-tag">Права</span>
+                            <span class="object-tag">Услуги</span>
                         </div>
                     </div>
                 </div>
@@ -86,216 +99,418 @@
         <div class="top-right">
             <div class="news-area" id="news">
                 <div class="news-header">
-                    <h3>📰 Новости</h3>
-                    <a href="#">Все →</a>
+                    <h3>Новости</h3>
+                    <a href="#" id="newsAllLink" class="news-all-btn"><span>Все</span><span class="arrow">→</span></a>
                 </div>
-                <div class="news-list">
-                    <div class="news-item">
-                        <div class="news-date">12 июля 2025</div>
-                        <h4>Новые правила капремонта с 1 сентября</h4>
-                        <span class="news-tag">Законы</span>
-                    </div>
-                    <div class="news-item">
-                        <div class="news-date">8 июля 2025</div>
-                        <h4>Тарифы на коммуналку: что изменилось</h4>
-                        <span class="news-tag">Тарифы</span>
-                    </div>
-                    <div class="news-item">
-                        <div class="news-date">3 июля 2025</div>
-                        <h4>ГИС ЖКХ: новые возможности</h4>
-                        <span class="news-tag">Сервисы</span>
-                    </div>
-                    <div class="news-item">
-                        <div class="news-date">28 июня 2025</div>
-                        <h4>Штрафы для УК увеличены</h4>
-                        <span class="news-tag">Законы</span>
-                    </div>
-                    <div class="news-item">
-                        <div class="news-date">22 июня 2025</div>
-                        <h4>Как проверить начисления за ЖКУ</h4>
-                        <span class="news-tag">Инструкции</span>
-                    </div>
-                </div>
+                <div class="news-list" id="newsList"></div>
             </div>
         </div>
     </section>
 
-    <section class="problems-section" id="problems">
+    <section class="useful-tips-section" id="usefulTips">
         <div class="section-divider">
-            <h2>Частые проблемы</h2>
+            <h2>Полезные советы</h2>
         </div>
 
-        <div id="objectFilterBadge" class="object-filter-badge">
-            <span id="objectFilterText"></span>
-            <button class="clear-filter" onclick="clearObjectFilter()">✕</button>
-        </div>
-
-        <div class="problems-toolbar">
-            <p>Выберите ситуацию — мы подскажем пошаговое решение</p>
-            <div class="problems-filter" id="categoryFilter">
-                <button class="filter-btn active" onclick="filterByCategory('all', this)">Все</button>
-                <button class="filter-btn" onclick="filterByCategory('payment', this)">Платежи</button>
-                <button class="filter-btn" onclick="filterByCategory('repair', this)">Ремонт</button>
-                <button class="filter-btn" onclick="filterByCategory('uk', this)">УК</button>
-                <button class="filter-btn" onclick="filterByCategory('services', this)">Услуги</button>
+        <div class="useful-tips-head">
+            <div>
+                <h3 id="usefulTipsSectionTitle">Популярные советы</h3>
+                <p class="useful-tips-subtitle" id="usefulTipsSubtitle">Выберите объект сверху или посмотрите популярные советы по всем категориям.</p>
             </div>
         </div>
 
-        <div class="problems-grid" id="problemsGrid">
-            <!-- Дом -->
-            <div class="problem-card" data-cat="repair" data-obj="house" onclick="openProblem('roof')">
-                <div class="problem-icon">🏚️</div>
-                <h3>Течь в крыше</h3>
-                <p>Куда обращаться и как добиться ремонта</p>
-                <span class="problem-obj-tag house">Дом</span>
+        <div id="usefulTipsStatus" class="form-status" aria-live="polite"></div>
+        <div class="useful-tips-panel">
+            <div class="useful-tips-toolbar">
+                <span id="usefulTipsMeta" class="useful-tips-meta"></span>
+                <div class="useful-tips-nav" id="usefulTipsNav">
+                    <button type="button" class="useful-tips-arrow" id="usefulTipsPrevBtn" aria-label="Предыдущие советы">‹</button>
+                    <button type="button" class="useful-tips-arrow" id="usefulTipsNextBtn" aria-label="Следующие советы">›</button>
+                </div>
             </div>
-            <div class="problem-card" data-cat="services" data-obj="house" onclick="openProblem('trash')">
-                <div class="problem-icon">🗑️</div>
-                <h3>Мусор не вывозят</h3>
-                <p>Порядок обращения в УК и контролирующие органы</p>
-                <span class="problem-obj-tag house">Дом</span>
-            </div>
-            <div class="problem-card" data-cat="uk" data-obj="house" onclick="openProblem('uk')">
-                <div class="problem-icon">📋</div>
-                <h3>УК не отчитывается</h3>
-                <p>Право на информацию и порядок запроса</p>
-                <span class="problem-obj-tag house">Дом</span>
-            </div>
-            <div class="problem-card" data-cat="services" data-obj="house" onclick="openProblem('yard')">
-                <div class="problem-icon">🌨️</div>
-                <h3>Снег и грязь во дворе</h3>
-                <p>Обязанности УК по содержанию территории</p>
-                <span class="problem-obj-tag house">Дом</span>
-            </div>
-
-            <!-- Квартира -->
-            <div class="problem-card" data-cat="payment" data-obj="apartment" onclick="openProblem('debt')">
-                <div class="problem-icon">💰</div>
-                <h3>Задолженность за коммуналку</h3>
-                <p>Как оспорить начисления и избежать отключения</p>
-                <span class="problem-obj-tag apartment">Квартира</span>
-            </div>
-            <div class="problem-card" data-cat="services" data-obj="apartment" onclick="openProblem('water')">
-                <div class="problem-icon">🚿</div>
-                <h3>Нет горячей воды</h3>
-                <p>Сроки отключения и перерасчёт</p>
-                <span class="problem-obj-tag apartment">Квартира</span>
-            </div>
-            <div class="problem-card" data-cat="payment" data-obj="apartment" onclick="openProblem('heating')">
-                <div class="problem-icon">🌡️</div>
-                <h3>Перерасчёт за отопление</h3>
-                <p>Когда можно требовать и как оформить</p>
-                <span class="problem-obj-tag apartment">Квартира</span>
-            </div>
-
-            <!-- Подъезд -->
-            <div class="problem-card" data-cat="repair" data-obj="entrance" onclick="openProblem('repair_e')">
-                <div class="problem-icon">🔧</div>
-                <h3>Плохой ремонт подъезда</h3>
-                <p>Как заставить УК выполнить обязательства</p>
-                <span class="problem-obj-tag entrance">Подъезд</span>
-            </div>
-            <div class="problem-card" data-cat="uk" data-obj="entrance" onclick="openProblem('neighbors')">
-                <div class="problem-icon">🤝</div>
-                <h3>Споры с соседями</h3>
-                <p>Шум, затопление, общее имущество</p>
-                <span class="problem-obj-tag entrance">Подъезд</span>
-            </div>
-
-            <div class="no-results" id="noResults">
-                <div class="emoji">🔍</div>
-                <p>Нет проблем в этой категории.<br>Попробуйте другой фильтр.</p>
-            </div>
+            <div id="usefulTipsGrid" class="useful-tips-grid"></div>
         </div>
     </section>
 
     <section class="bottom-section" id="legal">
         <div class="legal-compact">
-            <h3>📚 Нормативная база</h3>
+            <h3>Нормативная база</h3>
             <div class="legal-list">
-                <div class="legal-item"><div class="legal-item-icon">⚖️</div><div><h4>Судебная практика</h4><p>Решения судов по спорам ЖКХ</p></div></div>
-                <div class="legal-item"><div class="legal-item-icon">📄</div><div><h4>Образцы документов</h4><p>Заявления, жалобы, претензии</p></div></div>
-                <div class="legal-item"><div class="legal-item-icon">🏛️</div><div><h4>Куда обращаться</h4><p>ГЖИ, прокуратура, суд</p></div></div>
-                <div class="legal-item"><div class="legal-item-icon">📖</div><div><h4>Законы и кодексы</h4><p>ЖК РФ, ПП №354, ПП №491</p></div></div>
+                <button class="legal-item legal-item-btn" id="openDocsPage" type="button"><div class="legal-item-icon">01</div><div><h4>Образцы документов</h4><p>Заявления и иски по категориям объектов</p></div></button>
+                <button class="legal-item legal-item-btn" id="openManagementCompanies" type="button"><div class="legal-item-icon">02</div><div><h4>Основные управляющие компании</h4><p>Список УК Красноярска</p></div></button>
+                <button class="legal-item legal-item-btn" id="openEmergencyServices" type="button"><div class="legal-item-icon">03</div><div><h4>Контактная информация</h4><p>Аварийные службы по районам</p></div></button>
+                <button class="legal-item legal-item-btn" id="openTariffs" type="button"><div class="legal-item-icon">04</div><div><h4>Тарифы ЖКХ</h4><p>Таблица тарифов по услугам и поставщикам</p></div></button>
             </div>
         </div>
-        <div class="calendar-compact">
-            <h3>📅 Июль 2025 <div class="cal-nav-btns"><button>‹</button><button>›</button></div></h3>
-            <div class="cal-grid">
-                <div class="cal-dn">Пн</div><div class="cal-dn">Вт</div><div class="cal-dn">Ср</div>
-                <div class="cal-dn">Чт</div><div class="cal-dn">Пт</div><div class="cal-dn">Сб</div><div class="cal-dn">Вс</div>
-                <div class="cal-d muted">30</div><div class="cal-d">1</div><div class="cal-d">2</div><div class="cal-d">3</div>
-                <div class="cal-d">4</div><div class="cal-d">5</div><div class="cal-d">6</div>
-                <div class="cal-d">7</div><div class="cal-d">8</div><div class="cal-d">9</div>
-                <div class="cal-d has-event">10</div><div class="cal-d">11</div><div class="cal-d">12</div><div class="cal-d">13</div>
-                <div class="cal-d">14</div><div class="cal-d today">15</div><div class="cal-d">16</div>
-                <div class="cal-d">17</div><div class="cal-d">18</div><div class="cal-d">19</div>
-                <div class="cal-d has-event">20</div><div class="cal-d">21</div><div class="cal-d">22</div><div class="cal-d">23</div>
-                <div class="cal-d">24</div><div class="cal-d has-event">25</div><div class="cal-d">26</div><div class="cal-d">27</div>
-                <div class="cal-d">28</div><div class="cal-d">29</div><div class="cal-d">30</div><div class="cal-d">31</div>
-                <div class="cal-d muted">1</div><div class="cal-d muted">2</div><div class="cal-d muted">3</div>
+        <div class="calendar-compact calendar-immersive" id="calendarCompact">
+            <div class="calendar-hero">
+                <div class="calendar-hero-copy">
+                    <span class="calendar-kicker">Личный календарь</span>
+                    <h3 id="calendarMonthTitle">Июль 2025</h3>
+                    <p id="calendarMonthMeta" class="calendar-month-meta">Следите за сроками, заявками и личными заметками по дням.</p>
+                </div>
+                <div class="calendar-hero-actions">
+                    <button type="button" class="calendar-today-btn" id="calendarTodayBtn">Сегодня</button>
+                    <div class="cal-nav-btns">
+                        <button type="button" id="calendarPrevBtn" aria-label="Предыдущий месяц">‹</button>
+                        <button type="button" id="calendarNextBtn" aria-label="Следующий месяц">›</button>
+                    </div>
+                </div>
             </div>
-            <div class="cal-events-list">
-                <div class="cal-ev"><div class="cal-ev-dot red"></div><div><h4>Оплата ЖКУ</h4><p>До 10 июля</p></div></div>
-                <div class="cal-ev"><div class="cal-ev-dot blue"></div><div><h4>Собрание жильцов</h4><p>20 июля, 18:00</p></div></div>
-                <div class="cal-ev"><div class="cal-ev-dot green"></div><div><h4>Поверка счётчиков</h4><p>25 июля</p></div></div>
+
+            <div class="calendar-layout">
+                <div class="calendar-board">
+                    <div class="calendar-board-head">
+                        <div class="calendar-legend">
+                            <span><i class="calendar-legend-dot planned"></i>Активные</span>
+                            <span><i class="calendar-legend-dot done"></i>Выполненные</span>
+                        </div>
+                        <div class="calendar-selected-chip" id="calendarSelectedDayChip">Выберите день</div>
+                    </div>
+
+                    <div class="cal-grid" id="calendarGrid">
+                        <!-- календарь рисуется из JS -->
+                    </div>
+                </div>
+
+                <div class="calendar-side">
+                    <div class="calendar-mobile-tabs" id="calendarMobileTabs" aria-label="Разделы календаря">
+                        <button type="button" class="calendar-mobile-tab" data-calendar-mobile-tab="summary">Сводка</button>
+                        <button type="button" class="calendar-mobile-tab" data-calendar-mobile-tab="events">Заметки</button>
+                    </div>
+
+                    <div class="calendar-day-card" data-calendar-mobile-panel="summary">
+                        <div class="calendar-day-card-top">
+                            <div class="calendar-day-badge" id="calendarDayBadge">00</div>
+                            <div>
+                                <div class="calendar-selected-day" id="calendarSelectedDayLabel">Выберите день</div>
+                                <div class="calendar-selected-day-meta" id="calendarSelectedDayMeta">Выберите дату, чтобы увидеть список заметок и быстро добавить новую.</div>
+                            </div>
+                        </div>
+                        <div class="calendar-stats" id="calendarStats"></div>
+                    </div>
+
+                    <div class="calendar-events-panel" data-calendar-mobile-panel="events">
+                        <div class="calendar-events-head">
+                            <div>
+                                <h4>План на день</h4>
+                                <span class="calendar-events-count" id="calendarEventsCount">0 заметок</span>
+                            </div>
+                            <button type="button" class="calendar-add-note-btn" id="calendarOpenCreateBtn">Добавить заметку</button>
+                        </div>
+                        <div class="cal-events-list" id="calendarEventsList">
+                            <div class="news-state">Выберите день, чтобы посмотреть заметки.</div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
         <div class="cta-compact">
-            <h3>💬 Не нашли ответ?</h3>
+            <h3>Не нашли ответ?</h3>
             <p>Опишите ситуацию — подберём решение, документы и подскажем, куда обращаться</p>
-            <button class="btn-cta" onclick="openModal('questionModal')">✉ Задать вопрос</button>
+            <button class="btn-cta" onclick="openModal('questionModal')">Задать вопрос</button>
         </div>
+    </section>
+
+    <section class="map-preview-section" id="cityMap">
+        <div class="map-preview-header">
+            <h2>Карта района</h2>
+        </div>
+        <button class="map-preview-card" type="button" onclick="openMapPage()">
+            <div class="map-placeholder">
+                <div id="mapPreviewCanvas" class="dgis-map-canvas"></div>
+                <div class="map-fallback" id="mapPreviewFallback">Загрузка 2ГИС карты...</div>
+            </div>
+            <div class="map-preview-overlay">
+                <div>
+                    <h3>Открыть большую карту</h3>
+                    <p>Нажмите, чтобы развернуть карту на весь экран</p>
+                </div>
+                <span class="map-open-btn">Развернуть →</span>
+            </div>
+        </button>
     </section>
 
     <footer class="footer">
         <div class="footer-inner">
             <div class="footer-brand">
-                <div class="logo" style="margin-bottom:0.2rem;">
-                    <div class="logo-icon">🛡️</div>
+                <div class="logo footer-logo" style="margin-bottom:0.2rem;">
+                    <a href="#" class="logo" aria-label="Веста">
+                        <div class="logo-text">
+                            <div class="logo-icon" aria-hidden="true">
+                                <svg width="72" height="72" viewBox="0 0 72 72" class="logo-icon-svg">
+                                    <image href="logo.png" class="logo-icon-img" width="72" height="72" preserveAspectRatio="xMidYMid slice"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
                     <div class="logo-text"><span class="logo-name">Веста</span><span class="logo-sub">хранительница дома</span></div>
                 </div>
-                <p>Бесплатный информационный сервис для граждан в сфере ЖКХ. Как древняя богиня Веста хранила домашний очаг, так и мы помогаем защитить ваш дом.</p>
+                <p>Бесплатный информационный сервис для граждан в сфере ЖКХ</p>
             </div>
-            <div><h4>Разделы</h4><ul><li><a href="#problems">Проблемы</a></li><li><a href="#objects">Мой объект</a></li><li><a href="#legal">Нормативная база</a></li><li><a href="#news">Новости</a></li></ul></div>
-            <div><h4>Документы</h4><ul><li><a href="#">Образцы заявлений</a></li><li><a href="#">Судебная практика</a></li><li><a href="#">Законы и кодексы</a></li></ul></div>
-            <div><h4>Сервис</h4><ul><li><a href="#">О проекте</a></li><li><a href="#">FAQ</a></li><li><a href="#">Обратная связь</a></li><li><a href="#">Конфиденциальность</a></li></ul></div>
+            <div><h4>Разделы</h4><ul><li><a href="#usefulTips">Полезные советы</a></li><li><a href="#objects">Мой объект</a></li><li><a href="#legal">Нормативная база</a></li><li><a href="#news">Новости</a></li></ul></div>
+            <div><h4>Документы</h4><ul><li><a href="#" id="openDocsFooter">Образцы документов</a></li><li><a href="#" id="openTariffsFooter">Тарифы ЖКХ</a></li><li><a href="#usefulTips">Полезные советы</a></li></ul></div>
         </div>
         <div class="footer-bottom">
-            <p>© 2025 Веста — Информационный сервис ЖКХ</p>
-            <div class="footer-bottom-links"><a href="#">Политика конфиденциальности</a><a href="#">Соглашение</a></div>
+            <p>© 2026 Веста — Информационный сервис ЖКХ</p>
         </div>
     </footer>
 
-    <!-- Модалки -->
-    <div class="modal-overlay" id="loginModal"><div class="modal">
+    <div class="modal-overlay" id="loginModal"><div class="modal auth-modal">
         <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
-        <h2>🔐 Вход в личный кабинет</h2>
-        <div class="form-group"><label>Email</label><input type="email" placeholder="example@mail.ru"></div>
-        <div class="form-group"><label>Пароль</label><input type="password" placeholder="Введите пароль"></div>
-        <button class="btn-submit">Войти</button>
-        <div style="text-align:center;margin-top:0.7rem;font-size:0.83rem;">
-            <a href="#" style="color:var(--primary);font-weight:600;">Регистрация</a>
-            <span style="margin:0 0.5rem;color:#ddd;">|</span>
-            <a href="#" style="color:var(--text-light);">Через Госуслуги</a>
+        <h2>Личный кабинет Весты</h2>
+        <p class="auth-subtitle">Вход и регистрация в один шаг. После регистрации вы автоматически войдете в аккаунт.</p>
+        <div id="authStatus" class="form-status" aria-live="polite"></div>
+        <div class="form-group"><label>Email</label><input id="loginEmail" name="username" type="email" autocomplete="username" inputmode="email" placeholder="example@mail.ru"></div>
+        <div class="form-group"><label>Пароль</label><input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="Введите пароль"></div>
+        <div class="auth-actions">
+            <button class="btn-submit" id="loginSubmitBtn">Войти</button>
+            <button class="btn-submit btn-submit-secondary" id="registerSubmitBtn">Зарегистрироваться</button>
         </div>
+    </div></div>
+
+    <div class="modal-overlay" id="documentsModal"><div class="modal docs-modal">
+        <button class="modal-close" onclick="closeModal('documentsModal')">✕</button>
+        <h2>Образцы документов</h2>
+        <p class="docs-subtitle">Скачайте готовые шаблоны документов по типу обращения и типу объекта.</p>
+
+        <div class="docs-filters">
+            <div class="docs-filter-group" id="docTypeTabs">
+                <button type="button" class="active" data-doc-mode="application" data-doc-type="application">Заявления</button>
+                <button type="button" data-doc-mode="claim" data-doc-type="claim">Иски</button>
+                <button type="button" class="docs-court-tab" data-doc-mode="court">Определить суд</button>
+            </div>
+            <div class="docs-filter-group" id="docScopeTabs">
+                <button type="button" data-area-scope="Дом">Дом</button>
+                <button type="button" data-area-scope="Подъезд">Подъезд</button>
+                <button type="button" class="active" data-area-scope="Квартира">Квартира</button>
+            </div>
+            <div class="docs-house-groups" id="docHouseGroupTabs" hidden>
+                <div class="docs-house-groups-head">
+                    <span class="docs-house-groups-kicker">Заявления для дома</span>
+                    <p id="docHouseGroupMeta">Выберите, куда направить обращение по дому.</p>
+                </div>
+                <div class="docs-house-groups-list">
+                    <button type="button" class="active" data-house-group="housing_inspection">Жилищная инспекция</button>
+                    <button type="button" data-house-group="prosecutor">Прокуратура</button>
+                    <button type="button" data-house-group="control_bodies">Органы контроля</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="docsStatus" class="form-status" aria-live="polite"></div>
+        <div class="docs-grid" id="documentsList"></div>
+        <div class="district-court-panel" id="districtCourtPanel" hidden>
+            <div class="district-court-shell">
+                <div class="district-court-intro">
+                    <div>
+                        <span class="district-court-kicker">Суд по адресу</span>
+                        <h3>Определите районный суд по адресу в Красноярске</h3>
+                        <p>Введите любой адрес. Мы покажем найденную точку на карте и районный суд, к которому относится этот адрес.</p>
+                    </div>
+                    <form class="district-court-search" id="districtCourtForm">
+                        <label class="sr-only" for="districtCourtAddressInput">Адрес</label>
+                        <div class="district-court-search-field">
+                            <input
+                                type="text"
+                                id="districtCourtAddressInput"
+                                class="district-court-input"
+                                placeholder="Например, ул. Ленина, 120"
+                                autocomplete="street-address"
+                            />
+                        </div>
+                        <button type="submit" class="district-court-submit">Найти суд</button>
+                    </form>
+                </div>
+
+                <div id="districtCourtStatus" class="form-status" aria-live="polite"></div>
+
+                <div class="district-court-layout">
+                    <div class="district-court-map-card">
+                        <div class="district-court-map-wrap">
+                            <div id="districtCourtMapCanvas" class="dgis-map-canvas district-court-map-canvas"></div>
+                            <div class="map-fallback" id="districtCourtMapFallback">Введите адрес, чтобы показать точку и районный суд на карте.</div>
+                        </div>
+                    </div>
+
+                    <div class="district-court-result" id="districtCourtResult">
+                        <div class="news-state">Введите адрес, и мы определим районный суд.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div></div>
+
+    <div class="modal-overlay" id="managementCompaniesModal"><div class="modal docs-modal">
+        <button class="modal-close" onclick="closeModal('managementCompaniesModal')">✕</button>
+        <h2>Основные управляющие компании</h2>
+        <p class="docs-subtitle">Основные УК Красноярска с адресами, количеством домов и контактами.</p>
+        <div id="managementCompaniesStatus" class="form-status" aria-live="polite"></div>
+        <div class="docs-grid management-grid" id="managementCompaniesList"></div>
+        <div class="all-news-footer">
+            <button type="button" class="all-news-more-btn" id="managementCompaniesMoreBtn">Загрузить ещё</button>
+        </div>
+        <div id="managementCompaniesSentinel" class="all-news-sentinel"></div>
+    </div></div>
+
+    <div class="modal-overlay" id="emergencyServicesModal"><div class="modal docs-modal">
+        <button class="modal-close" onclick="closeModal('emergencyServicesModal')">✕</button>
+        <h2>Контактная информация</h2>
+        <p class="docs-subtitle">Аварийно-диспетчерские службы и контакты по районам Красноярска.</p>
+        <div id="emergencyServicesStatus" class="form-status" aria-live="polite"></div>
+        <div class="docs-grid emergency-services-grid" id="emergencyServicesList"></div>
+    </div></div>
+
+    <div class="modal-overlay" id="tariffsModal"><div class="modal docs-modal">
+        <button class="modal-close" onclick="closeModal('tariffsModal')">✕</button>
+        <h2>Тарифы ЖКХ</h2>
+        <p class="docs-subtitle">Актуальная таблица тарифов по услугам, поставщикам и категориям потребителей.</p>
+        <div id="tariffsStatus" class="form-status" aria-live="polite"></div>
+        <div class="docs-grid regulatory-grid" id="tariffsList"></div>
     </div></div>
 
     <div class="modal-overlay" id="questionModal"><div class="modal">
         <button class="modal-close" onclick="closeModal('questionModal')">✕</button>
-        <h2>💬 Задать вопрос</h2>
-        <div class="form-group"><label>Имя</label><input type="text" placeholder="Иван Иванов"></div>
-        <div class="form-group"><label>Email</label><input type="email" placeholder="example@mail.ru"></div>
-        <div class="form-group"><label>Категория</label><select><option>Выберите...</option><option>Задолженность</option><option>Ремонт</option><option>УК</option><option>Услуги</option><option>Другое</option></select></div>
-        <div class="form-group"><label>Опишите проблему</label><textarea placeholder="Подробно опишите ситуацию..."></textarea></div>
-        <button class="btn-submit">Отправить</button>
+        <h2>Задать вопрос</h2>
+        <div id="questionStatus" class="form-status" aria-live="polite"></div>
+        <div class="form-group"><label>Имя</label><input id="questionName" type="text" placeholder="Иван Иванов"></div>
+        <div class="form-group"><label>Описание проблемы</label><textarea id="questionText" placeholder="Подробно опишите ситуацию..."></textarea></div>
+        <button class="btn-submit" id="questionSubmitBtn">Отправить</button>
     </div></div>
 
-    <div class="modal-overlay" id="problemModal"><div class="modal" style="max-width:600px;">
-        <button class="modal-close" onclick="closeModal('problemModal')">✕</button>
-        <div id="problemContent"></div>
+    <div class="modal-overlay" id="calendarCreateModal"><div class="modal auth-modal calendar-create-modal">
+        <button class="modal-close" type="button" id="calendarCreateModalCloseBtn">✕</button>
+        <h2>Новая заметка</h2>
+        <p class="auth-subtitle">Коротко зафиксируйте задачу на выбранный день в календаре.</p>
+        <div id="calendarStatus" class="form-status" aria-live="polite"></div>
+        <div class="form-group">
+            <label for="calendarNoteTitle">Название</label>
+            <input
+                type="text"
+                id="calendarNoteTitle"
+                class="calendar-note-input"
+                placeholder="Например, проверить начисления УК"
+                maxlength="120"
+            />
+        </div>
+        <div class="form-group">
+            <label for="calendarNoteDescription">Описание</label>
+            <textarea
+                id="calendarNoteDescription"
+                class="calendar-note-textarea"
+                placeholder="Детали, документы, дедлайн..."
+                maxlength="1000"
+            ></textarea>
+        </div>
+        <div class="auth-actions calendar-create-actions">
+            <button type="button" class="btn-submit btn-submit-secondary" id="calendarCancelCreateBtn">Отмена</button>
+            <button type="button" class="btn-submit" id="calendarCreateBtn">Сохранить</button>
+        </div>
     </div></div>
 
+    <section class="useful-tip-page" id="usefulTipPage" aria-hidden="true">
+        <div class="useful-tip-page-shell">
+            <div class="useful-tip-page-header">
+                <button type="button" class="useful-tip-page-close" onclick="goBackFromUsefulTipPage()">Назад</button>
+            </div>
+            <div class="useful-tip-page-body" id="usefulTipContent"></div>
+        </div>
+    </section>
+
+    <div class="modal-overlay" id="allNewsModal"><div class="modal all-news-modal">
+        <button class="modal-close" onclick="closeModal('allNewsModal')">✕</button>
+        <h2>Все новости</h2>
+        <div id="allNewsStatus" class="form-status" aria-live="polite"></div>
+        <div class="all-news-list" id="allNewsList"></div>
+        <div class="all-news-footer">
+            <div class="all-news-page-info" id="allNewsPageInfo"></div>
+            <button type="button" class="all-news-more-btn" id="allNewsMoreBtn">Загрузить ещё</button>
+        </div>
+        <div id="allNewsSentinel" class="all-news-sentinel"></div>
+    </div></div>
+
+    <div class="modal-overlay" id="searchResultsModal"><div class="modal search-modal">
+        <button class="modal-close" onclick="closeModal('searchResultsModal')">✕</button>
+        <div class="search-modal-head">
+            <div>
+                <div class="search-modal-kicker">Поиск по базе</div>
+                <h2>Результаты</h2>
+                <p class="docs-subtitle" id="searchResultsMeta">Ищем полезные советы и документы.</p>
+            </div>
+        </div>
+        <div id="searchResultsStatus" class="form-status" aria-live="polite"></div>
+        <div class="search-results-shell" id="searchResultsContent"></div>
+    </div></div>
+
+    <section class="map-page" id="mapPage" aria-hidden="true">
+        <div class="map-page-shell">
+            <div class="map-page-header">
+                <div class="map-page-header-actions">
+                    <label class="map-toggle map-toggle-compact">
+                        <input type="checkbox" id="showOthersToggle" checked>
+                        <span class="map-toggle-ui"></span>
+                        <span class="map-toggle-label">Чужие метки</span>
+                    </label>
+                    <button type="button" class="map-page-close" onclick="closeMapPage()">Закрыть</button>
+                </div>
+            </div>
+            <div class="map-page-layout">
+                <div class="map-page-canvas">
+                    <div class="map-placeholder large map-page-placeholder">
+                        <div id="mapModalCanvas" class="dgis-map-canvas"></div>
+                        <div class="map-fallback" id="mapModalFallback">Загрузка 2ГИС карты...</div>
+                    </div>
+                </div>
+                <div class="map-floating-statuses">
+                    <div id="mapMarkersStatus" class="form-status" aria-live="polite"></div>
+                    <div id="mapTypesStatus" class="form-status" aria-live="polite"></div>
+                </div>
+
+                <div class="map-bottom-sheet">
+                    <form class="map-panel-section map-marker-form hidden" id="mapMarkerForm">
+                        <div class="map-section-head">
+                            <div>
+                                <h3>Новая метка</h3>
+                            </div>
+                            <button type="button" class="map-cancel-btn" id="cancelMarkerCreateBtn">Отмена</button>
+                        </div>
+                        <div id="mapCreateStatus" class="form-status" aria-live="polite"></div>
+                        <div class="map-selected-point" id="mapSelectedPoint">Точка не выбрана</div>
+                        <div class="form-group">
+                            <label for="markerTypeSelect">Тип метки</label>
+                            <select id="markerTypeSelect">
+                                <option value="">Выберите тип</option>
+                            </select>
+                        </div>
+                        <div class="map-type-meta" id="markerTypeMeta"></div>
+                        <div class="form-group">
+                            <label for="markerDescriptionInput">Описание</label>
+                            <textarea id="markerDescriptionInput" maxlength="500" placeholder="Коротко опишите ситуацию"></textarea>
+                            <div class="map-char-counter" id="markerDescriptionCounter">0 / 500</div>
+                        </div>
+                        <button type="button" class="btn-submit" id="submitMarkerBtn">Сохранить метку</button>
+                    </form>
+
+                    <div class="map-panel-section map-marker-card hidden" id="mapMarkerCard">
+                        <div class="map-section-head">
+                            <div>
+                                <h3 id="mapMarkerCardTitle">Метка</h3>
+                            </div>
+                            <button type="button" class="map-cancel-btn" id="closeMarkerCardBtn">Закрыть</button>
+                        </div>
+                        <div id="mapMarkerCardStatus" class="form-status" aria-live="polite"></div>
+                        <div class="map-marker-card-meta" id="mapMarkerCardMeta"></div>
+                        <div class="map-marker-card-text" id="mapMarkerCardDescription"></div>
+                        <dl class="map-marker-card-grid" id="mapMarkerCardGrid"></dl>
+                        <button type="button" class="btn-submit map-delete-btn hidden" id="deleteMarkerBtn">Удалить метку</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full"></script>
     <script src="script.js"></script>
 </body>
 </html>
