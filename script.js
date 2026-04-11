@@ -217,7 +217,9 @@ function renderLegacyProblem(problem) {
             <div style="display:flex;flex-direction:column;gap:0.3rem;">
                 ${problem.docs
                   .map(
-                    (doc) => `<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.7rem;background:var(--bg);border-radius:6px;cursor:pointer;font-size:0.84rem;">
+                    (
+                      doc,
+                    ) => `<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.7rem;background:var(--bg);border-radius:6px;cursor:pointer;font-size:0.84rem;">
                     <span style="width:22px;height:22px;border-radius:999px;background:rgba(18,59,54,0.08);display:inline-flex;align-items:center;justify-content:center;color:var(--primary);font-size:0.62rem;font-weight:800;">D</span><span style="flex:1;font-weight:500;">${escapeHtml(doc)}</span><span style="color:var(--primary);font-size:0.76rem;font-weight:700;">Скачать</span>
                 </div>`,
                   )
@@ -248,7 +250,10 @@ async function performSearch() {
     const response = await fetchSearchResults(q, 6);
     renderSearchResults(response, q);
   } catch (error) {
-    renderSearchResultsState(error.message || "Не удалось выполнить поиск", true);
+    renderSearchResultsState(
+      error.message || "Не удалось выполнить поиск",
+      true,
+    );
   }
 }
 
@@ -277,7 +282,7 @@ function toggleMenu() {
   setMenuState(!nav.classList.contains("active"));
 }
 
-const API_BASE_URL = "http://localhost:8080/api/v1";
+const API_BASE_URL = "/api/v1";
 const NEWS_PAGE = 1;
 const NEWS_LIMIT = 4;
 const NEWS_ALL_LIMIT = 20;
@@ -397,7 +402,8 @@ const localUsefulTipsByScope = {
       {
         slug: "house-meeting-prep",
         title: "Как подготовить собрание собственников",
-        preview_text: "Минимальный набор шагов и документов перед проведением ОСС.",
+        preview_text:
+          "Минимальный набор шагов и документов перед проведением ОСС.",
         area_scope: "Дом",
         documents_count: 3,
         regulatory_documents_count: 2,
@@ -417,7 +423,8 @@ const localUsefulTipsByScope = {
       {
         slug: "house-meeting-prep",
         title: "Как подготовить собрание собственников",
-        preview_text: "Минимальный набор шагов и документов перед проведением ОСС.",
+        preview_text:
+          "Минимальный набор шагов и документов перед проведением ОСС.",
         area_scope: "Дом",
         documents_count: 3,
         regulatory_documents_count: 2,
@@ -426,7 +433,8 @@ const localUsefulTipsByScope = {
       {
         slug: "house-claims-log",
         title: "Ведите журнал обращений в УК",
-        preview_text: "Одна таблица помогает видеть сроки, номера заявок и ответы.",
+        preview_text:
+          "Одна таблица помогает видеть сроки, номера заявок и ответы.",
         area_scope: "Дом",
         documents_count: 1,
         regulatory_documents_count: 1,
@@ -448,7 +456,8 @@ const localUsefulTipsByScope = {
       {
         slug: "entrance-collective-claim",
         title: "Коллективное обращение работает лучше",
-        preview_text: "Для подъезда обычно лучше сразу собирать несколько подписей.",
+        preview_text:
+          "Для подъезда обычно лучше сразу собирать несколько подписей.",
         area_scope: "Подъезд",
         documents_count: 2,
         regulatory_documents_count: 2,
@@ -468,7 +477,8 @@ const localUsefulTipsByScope = {
       {
         slug: "entrance-collective-claim",
         title: "Коллективное обращение работает лучше",
-        preview_text: "Для подъезда обычно лучше сразу собирать несколько подписей.",
+        preview_text:
+          "Для подъезда обычно лучше сразу собирать несколько подписей.",
         area_scope: "Подъезд",
         documents_count: 2,
         regulatory_documents_count: 2,
@@ -477,7 +487,8 @@ const localUsefulTipsByScope = {
       {
         slug: "entrance-cleaning-check",
         title: "Проверяйте график уборки",
-        preview_text: "Сверьте фактическую уборку с графиком и фиксируйте отступления.",
+        preview_text:
+          "Сверьте фактическую уборку с графиком и фиксируйте отступления.",
         area_scope: "Подъезд",
         documents_count: 1,
         regulatory_documents_count: 1,
@@ -510,22 +521,30 @@ function setStatus(elementId, text, type = "info") {
 
 function buildUserErrorMessage(status, path, apiError = "") {
   const normalizedPath = String(path || "");
-  const normalizedError = String(apiError || "").trim().toLowerCase();
+  const normalizedError = String(apiError || "")
+    .trim()
+    .toLowerCase();
 
-  if (normalizedError.includes("failed to fetch") || normalizedError.includes("networkerror")) {
+  if (
+    normalizedError.includes("failed to fetch") ||
+    normalizedError.includes("networkerror")
+  ) {
     return "Не удалось связаться с сервером. Проверьте интернет-соединение и попробуйте еще раз.";
   }
 
   if (normalizedPath.includes("/auth/login")) {
     if (status === 400) return "Проверьте email и пароль и попробуйте снова.";
     if (status === 401) return "Неверный пароль. Попробуйте еще раз.";
-    if (status === 403) return "Аккаунт временно недоступен. Обратитесь к администратору или попробуйте позже.";
+    if (status === 403)
+      return "Аккаунт временно недоступен. Обратитесь к администратору или попробуйте позже.";
     if (status === 404) return "Пользователь с таким email не найден.";
   }
 
   if (normalizedPath.includes("/auth/register")) {
-    if (status === 400) return "Не удалось создать аккаунт. Проверьте правильность email и длину пароля.";
-    if (status === 409) return "Аккаунт с таким email уже существует. Попробуйте войти.";
+    if (status === 400)
+      return "Не удалось создать аккаунт. Проверьте правильность email и длину пароля.";
+    if (status === 409)
+      return "Аккаунт с таким email уже существует. Попробуйте войти.";
   }
 
   if (normalizedPath.includes("/auth/introspect")) {
@@ -533,33 +552,44 @@ function buildUserErrorMessage(status, path, apiError = "") {
   }
 
   if (normalizedPath.includes("/map-markers")) {
-    if (status === 400) return "Не удалось обработать данные метки. Проверьте введенную информацию.";
-    if (status === 401) return "Чтобы работать с метками, нужно войти в аккаунт.";
+    if (status === 400)
+      return "Не удалось обработать данные метки. Проверьте введенную информацию.";
+    if (status === 401)
+      return "Чтобы работать с метками, нужно войти в аккаунт.";
     if (status === 403) return "Эта метка вам недоступна.";
     if (status === 404) return "Метка не найдена. Возможно, она уже удалена.";
-    if (status === 422) return "Лимит активных меток исчерпан. Удалите старую метку или подождите.";
-    if (status === 429) return "Слишком много действий за короткое время. Попробуйте через минуту.";
+    if (status === 422)
+      return "Лимит активных меток исчерпан. Удалите старую метку или подождите.";
+    if (status === 429)
+      return "Слишком много действий за короткое время. Попробуйте через минуту.";
   }
 
   if (normalizedPath.includes("/calendar/notes")) {
-    if (status === 400) return "Не удалось сохранить данные календаря. Проверьте заполненные поля.";
-    if (status === 401) return "Чтобы пользоваться календарем, нужно войти в аккаунт.";
+    if (status === 400)
+      return "Не удалось сохранить данные календаря. Проверьте заполненные поля.";
+    if (status === 401)
+      return "Чтобы пользоваться календарем, нужно войти в аккаунт.";
     if (status === 403) return "Эта заметка вам недоступна.";
-    if (status === 404) return "Заметка не найдена. Возможно, она уже была удалена.";
+    if (status === 404)
+      return "Заметка не найдена. Возможно, она уже была удалена.";
   }
 
   if (normalizedPath.includes("/send-question")) {
-    if (status === 400) return "Проверьте имя и описание проблемы, затем попробуйте еще раз.";
+    if (status === 400)
+      return "Проверьте имя и описание проблемы, затем попробуйте еще раз.";
     if (status === 401) return "Чтобы отправить вопрос, нужно войти в аккаунт.";
   }
 
   if (normalizedPath.includes("/district-courts/nearest")) {
-    if (status === 400) return "Введите адрес в Красноярске, чтобы мы смогли найти районный суд.";
-    if (status === 404) return "По этому адресу не удалось определить районный суд. Попробуйте указать адрес точнее.";
+    if (status === 400)
+      return "Введите адрес в Красноярске, чтобы мы смогли найти районный суд.";
+    if (status === 404)
+      return "По этому адресу не удалось определить районный суд. Попробуйте указать адрес точнее.";
   }
 
   if (normalizedPath.includes("/files")) {
-    if (status === 400) return "Не удалось обработать документ. Проверьте параметры и попробуйте снова.";
+    if (status === 400)
+      return "Не удалось обработать документ. Проверьте параметры и попробуйте снова.";
     if (status === 404) return "Документ не найден или больше недоступен.";
   }
 
@@ -567,14 +597,19 @@ function buildUserErrorMessage(status, path, apiError = "") {
     if (status === 400) return "Введите более точный поисковый запрос.";
   }
 
-  if (status === 400) return "Не удалось обработать запрос. Проверьте введенные данные.";
+  if (status === 400)
+    return "Не удалось обработать запрос. Проверьте введенные данные.";
   if (status === 401) return "Нужно войти в аккаунт, чтобы продолжить.";
   if (status === 403) return "У вас нет доступа к этому действию.";
   if (status === 404) return "Нужные данные не найдены.";
-  if (status === 409) return "Такое действие сейчас недоступно из-за конфликта данных. Попробуйте обновить страницу.";
-  if (status === 422) return "Не удалось выполнить действие из-за ограничений по данным.";
-  if (status === 429) return "Слишком много запросов. Подождите немного и попробуйте снова.";
-  if (status >= 500) return "На сервере произошла ошибка. Мы уже получили запрос, попробуйте немного позже.";
+  if (status === 409)
+    return "Такое действие сейчас недоступно из-за конфликта данных. Попробуйте обновить страницу.";
+  if (status === 422)
+    return "Не удалось выполнить действие из-за ограничений по данным.";
+  if (status === 429)
+    return "Слишком много запросов. Подождите немного и попробуйте снова.";
+  if (status >= 500)
+    return "На сервере произошла ошибка. Мы уже получили запрос, попробуйте немного позже.";
 
   return "Произошла ошибка. Попробуйте еще раз.";
 }
@@ -596,7 +631,8 @@ async function apiRequest(path, options = {}) {
   } = options;
 
   const finalHeaders = { ...headers };
-  const finalCredentials = auth && credentials === "omit" ? "include" : credentials;
+  const finalCredentials =
+    auth && credentials === "omit" ? "include" : credentials;
   const hasBody = body !== null && body !== undefined;
   if (!isFormData && hasBody) {
     finalHeaders["Content-Type"] = "application/json";
@@ -613,11 +649,7 @@ async function apiRequest(path, options = {}) {
     response = await fetch(`${API_BASE_URL}${path}`, {
       method,
       headers: finalHeaders,
-      body: body
-        ? isFormData
-          ? body
-          : JSON.stringify(body)
-        : null,
+      body: body ? (isFormData ? body : JSON.stringify(body)) : null,
       credentials: finalCredentials,
     });
   } catch (error) {
@@ -668,7 +700,8 @@ function renderNews(items) {
       const hasImage =
         typeof item.image_url === "string" && item.image_url.length > 0;
       const description =
-        typeof item.description === "string" && item.description.trim().length > 0
+        typeof item.description === "string" &&
+        item.description.trim().length > 0
           ? `<p class="news-description">${escapeHtml(item.description)}</p>`
           : "";
       const source = item.source_name || item.channel_title || "Источник";
@@ -749,7 +782,10 @@ function syncUsefulTipsLayout() {
   usefulTipsState.pageSize = getUsefulTipsPageSize();
 
   if (grid) {
-    grid.style.setProperty("--useful-tips-page-size", String(usefulTipsState.pageSize));
+    grid.style.setProperty(
+      "--useful-tips-page-size",
+      String(usefulTipsState.pageSize),
+    );
   }
 
   if (!usefulTipsState.scope) {
@@ -757,7 +793,10 @@ function syncUsefulTipsLayout() {
     return;
   }
 
-  const pageCount = Math.max(1, Math.ceil(usefulTipsState.items.length / usefulTipsState.pageSize));
+  const pageCount = Math.max(
+    1,
+    Math.ceil(usefulTipsState.items.length / usefulTipsState.pageSize),
+  );
   if (usefulTipsState.currentPage > pageCount - 1) {
     usefulTipsState.currentPage = pageCount - 1;
   }
@@ -780,7 +819,10 @@ function updateUsefulTipsPager(items) {
   const title = document.getElementById("usefulTipsSectionTitle");
   const subtitle = document.getElementById("usefulTipsSubtitle");
   const meta = document.getElementById("usefulTipsMeta");
-  const pageCount = Math.max(1, Math.ceil(items.length / usefulTipsState.pageSize));
+  const pageCount = Math.max(
+    1,
+    Math.ceil(items.length / usefulTipsState.pageSize),
+  );
 
   if (title) {
     title.textContent = usefulTipsState.scope
@@ -811,7 +853,10 @@ function updateUsefulTipsPager(items) {
 function renderUsefulTipsCards(items, targetId) {
   const el = document.getElementById(targetId);
   if (!el) return;
-  el.style.setProperty("--useful-tips-page-size", String(usefulTipsState.pageSize));
+  el.style.setProperty(
+    "--useful-tips-page-size",
+    String(usefulTipsState.pageSize),
+  );
 
   if (!items.length) {
     el.innerHTML = `<div class="news-state">Советы пока не найдены.</div>`;
@@ -822,7 +867,10 @@ function renderUsefulTipsCards(items, targetId) {
   const pageItems = getUsefulTipsPageItems(items);
   updateUsefulTipsPager(items);
 
-  el.classList.toggle("useful-tips-grid--paged", Boolean(usefulTipsState.scope));
+  el.classList.toggle(
+    "useful-tips-grid--paged",
+    Boolean(usefulTipsState.scope),
+  );
   el.style.setProperty(
     "--useful-tips-visible-count",
     String(Math.max(1, pageItems.length)),
@@ -833,9 +881,7 @@ function renderUsefulTipsCards(items, targetId) {
       const sectionTitles = Array.isArray(item.section_titles)
         ? item.section_titles.slice(0, 4)
         : [];
-      const outline = sectionTitles.length
-        ? sectionTitles.join(", ")
-        : "";
+      const outline = sectionTitles.length ? sectionTitles.join(", ") : "";
       return `
         <article class="useful-tip-card" data-tip-slug="${escapeHtml(item.slug)}">
           <div class="useful-tip-card-body">
@@ -905,7 +951,10 @@ function renderUsefulTipDetail(detail) {
                 ${
                   Array.isArray(section.items) && section.items.length
                     ? `<ul>${section.items
-                        .map((item) => `<li>${escapeHtml(item.content || "")}</li>`)
+                        .map(
+                          (item) =>
+                            `<li>${escapeHtml(item.content || "")}</li>`,
+                        )
                         .join("")}</ul>`
                     : ""
                 }
@@ -921,8 +970,8 @@ function renderUsefulTipDetail(detail) {
         <h3>Нормативная база</h3>
         <div class="useful-tip-legal-list">
           ${legalLinks
-                  .map(
-                    (item) => `
+            .map(
+              (item) => `
                       <a
                         href="${escapeHtml(item.url)}"
                         target="_blank"
@@ -933,8 +982,8 @@ function renderUsefulTipDetail(detail) {
                         <span class="useful-tip-legal-link-meta">Открыть источник</span>
                       </a>
                     `,
-                  )
-                  .join("")}
+            )
+            .join("")}
         </div>
         </section>`
             : ""
@@ -945,8 +994,8 @@ function renderUsefulTipDetail(detail) {
         <h3>Документы</h3>
         <div class="useful-tip-side-list">
           ${documents
-                  .map(
-                    (doc) => `
+            .map(
+              (doc) => `
                       <button
                         type="button"
                         class="useful-side-item"
@@ -958,8 +1007,8 @@ function renderUsefulTipDetail(detail) {
                         <strong>Скачать</strong>
                       </button>
                     `,
-                  )
-                  .join("")}
+            )
+            .join("")}
         </div>
         </section>`
             : ""
@@ -970,8 +1019,8 @@ function renderUsefulTipDetail(detail) {
         <h3>Управляющие компании</h3>
         <div class="useful-tip-side-list">
           ${managementCompanies
-                  .map(
-                    (company) => `
+            .map(
+              (company) => `
                       <div class="useful-side-item useful-side-static">
                         <span>${escapeHtml(company.name || "УК")}</span>
                         <strong>${escapeHtml(company.address || "Адрес не указан")}</strong>
@@ -982,8 +1031,8 @@ function renderUsefulTipDetail(detail) {
                         }
                       </div>
                     `,
-                  )
-                  .join("")}
+            )
+            .join("")}
         </div>
         </section>
             `
@@ -1020,7 +1069,11 @@ async function handleUsefulTipDocumentDownload(event) {
       }
     }
   } catch (error) {
-    setStatus("usefulTipsStatus", error.message || "Не удалось скачать документ", "error");
+    setStatus(
+      "usefulTipsStatus",
+      error.message || "Не удалось скачать документ",
+      "error",
+    );
   }
 }
 
@@ -1114,7 +1167,7 @@ function getApiPathFromUrl(url) {
 
   try {
     const parsedUrl = new URL(url, window.location.origin);
-    const apiBase = new URL(API_BASE_URL);
+    const apiBase = new URL(API_BASE_URL, window.location.origin);
     if (parsedUrl.origin === apiBase.origin) {
       return `${parsedUrl.pathname}${parsedUrl.search}`;
     }
@@ -1128,7 +1181,10 @@ function getApiPathFromUrl(url) {
 async function resolveDownloadTarget(actionUrl) {
   const apiPath = getApiPathFromUrl(actionUrl);
   if (!apiPath) {
-    return { url: resolveSearchActionUrl(actionUrl, "download"), originalName: "" };
+    return {
+      url: resolveSearchActionUrl(actionUrl, "download"),
+      originalName: "",
+    };
   }
 
   const payload = await apiRequest(apiPath);
@@ -1141,16 +1197,22 @@ async function resolveDownloadTarget(actionUrl) {
 async function handleSearchResultAction(button) {
   if (!button) return;
 
-  const actionType = button.getAttribute("data-search-action-type") || "navigate";
+  const actionType =
+    button.getAttribute("data-search-action-type") || "navigate";
   const actionUrl = button.getAttribute("data-search-action-url") || "";
   const resultType = button.getAttribute("data-search-result-type") || "";
   if (!actionUrl) return;
 
   if (actionType === "download") {
     try {
-      const title = button.getAttribute("data-search-result-title") || "Документ";
+      const title =
+        button.getAttribute("data-search-result-title") || "Документ";
       const downloadTarget = await resolveDownloadTarget(actionUrl);
-      await forceDownloadByTitle(downloadTarget.url, title, downloadTarget.originalName);
+      await forceDownloadByTitle(
+        downloadTarget.url,
+        title,
+        downloadTarget.originalName,
+      );
     } catch (_downloadError) {
       window.open(
         resolveSearchActionUrl(actionUrl, actionType),
@@ -1211,7 +1273,8 @@ function renderSearchResults(response, rawQuery) {
       const actionType = item?.action?.type || "navigate";
       const actionLabel = getSearchActionLabel(actionType);
       const typeLabel =
-        item?.type_label || getSearchGroupTitle(item?.type || "other", "Результат");
+        item?.type_label ||
+        getSearchGroupTitle(item?.type || "other", "Результат");
       return `
         <button
           type="button"
@@ -1253,7 +1316,10 @@ function renderSearchResults(response, rawQuery) {
       try {
         await handleSearchResultAction(button);
       } catch (error) {
-        renderSearchResultsState(error.message || "Не удалось открыть результат поиска", true);
+        renderSearchResultsState(
+          error.message || "Не удалось открыть результат поиска",
+          true,
+        );
       }
     });
   });
@@ -1288,7 +1354,8 @@ function renderAllNews(items) {
       const hasImage =
         typeof item.image_url === "string" && item.image_url.length > 0;
       const description =
-        typeof item.description === "string" && item.description.trim().length > 0
+        typeof item.description === "string" &&
+        item.description.trim().length > 0
           ? `<p class="news-description">${escapeHtml(item.description)}</p>`
           : "";
       const source = item.source_name || item.channel_title || "Источник";
@@ -1463,12 +1530,14 @@ function getMapBounds(instance) {
   const bounds = instance.getBounds();
   if (!bounds) return null;
 
-  const southWest = typeof bounds.getSouthWest === "function"
-    ? bounds.getSouthWest()
-    : bounds._southWest;
-  const northEast = typeof bounds.getNorthEast === "function"
-    ? bounds.getNorthEast()
-    : bounds._northEast;
+  const southWest =
+    typeof bounds.getSouthWest === "function"
+      ? bounds.getSouthWest()
+      : bounds._southWest;
+  const northEast =
+    typeof bounds.getNorthEast === "function"
+      ? bounds.getNorthEast()
+      : bounds._northEast;
 
   if (!southWest || !northEast) return null;
   return {
@@ -1506,7 +1575,10 @@ function getMapSourceForBounds() {
 function openMapPage() {
   const page = document.getElementById("mapPage");
   if (!page) return;
-  lastMapPageTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  lastMapPageTrigger =
+    document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null;
   page.classList.add("active");
   page.setAttribute("aria-hidden", "false");
   document.body.classList.add("map-page-open");
@@ -1521,8 +1593,7 @@ function closeMapPage() {
   const page = document.getElementById("mapPage");
   if (!page) return;
   const fallbackTrigger =
-    document.querySelector(".map-preview-card") ||
-    lastMapPageTrigger;
+    document.querySelector(".map-preview-card") || lastMapPageTrigger;
   if (fallbackTrigger instanceof HTMLElement) {
     fallbackTrigger.focus();
   }
@@ -1559,7 +1630,8 @@ function getWorkflowStatusMeta(workflowStatus) {
 
 function getMarkerVisual(marker) {
   const type =
-    getMarkerTypeByCode(marker?.type_code) || getMarkerTypeById(marker?.type_id);
+    getMarkerTypeByCode(marker?.type_code) ||
+    getMarkerTypeById(marker?.type_id);
   const workflowMeta = getWorkflowStatusMeta(marker?.workflow_status);
   return {
     color: workflowMeta.color,
@@ -1773,7 +1845,10 @@ function fillMarkerTypeSelect() {
     )
     .join("");
   select.innerHTML = `<option value="">Выберите тип</option>${options}`;
-  if (currentValue && mapState.markerTypes.some((type) => type.code === currentValue)) {
+  if (
+    currentValue &&
+    mapState.markerTypes.some((type) => type.code === currentValue)
+  ) {
     select.value = currentValue;
   }
 }
@@ -1986,7 +2061,11 @@ async function loadMarkersForCurrentBounds(force = false) {
   const bounds = getMapBounds(getMapSourceForBounds());
   if (!bounds) return;
   const key = serializeBounds(bounds);
-  if (!force && key === mapState.lastModalBoundsKey && mapState.markers.length) {
+  if (
+    !force &&
+    key === mapState.lastModalBoundsKey &&
+    mapState.markers.length
+  ) {
     renderMapMarkers();
     return;
   }
@@ -2051,11 +2130,19 @@ async function handleMarkerSubmit() {
     return;
   }
   if (type.description_required && !description) {
-    setMapStatus("mapCreateStatus", "Для этого типа описание обязательно", "error");
+    setMapStatus(
+      "mapCreateStatus",
+      "Для этого типа описание обязательно",
+      "error",
+    );
     return;
   }
   if (description.length > 500) {
-    setMapStatus("mapCreateStatus", "Описание не должно превышать 500 символов", "error");
+    setMapStatus(
+      "mapCreateStatus",
+      "Описание не должно превышать 500 символов",
+      "error",
+    );
     return;
   }
 
@@ -2132,12 +2219,17 @@ function initMapMarkerBindings() {
     .getElementById("deleteMarkerBtn")
     ?.addEventListener("click", handleMarkerDelete);
 
-  document.getElementById("showOthersToggle")?.addEventListener("change", (event) => {
-    mapState.showOthers = Boolean(event.target.checked);
-    localStorage.setItem(SHOW_OTHERS_STORAGE_KEY, mapState.showOthers ? "1" : "0");
-    renderMapMarkers();
-    setMapStatus("mapMarkersStatus", "", "info");
-  });
+  document
+    .getElementById("showOthersToggle")
+    ?.addEventListener("change", (event) => {
+      mapState.showOthers = Boolean(event.target.checked);
+      localStorage.setItem(
+        SHOW_OTHERS_STORAGE_KEY,
+        mapState.showOthers ? "1" : "0",
+      );
+      renderMapMarkers();
+      setMapStatus("mapMarkersStatus", "", "info");
+    });
 }
 
 function initDgisMaps() {
@@ -2167,7 +2259,10 @@ function initDgisMaps() {
       }
       hideMapFallback("mapPreviewFallback");
     } catch (_error) {
-      setMapFallbackText("mapPreviewFallback", "Ошибка инициализации превью карты.");
+      setMapFallbackText(
+        "mapPreviewFallback",
+        "Ошибка инициализации превью карты.",
+      );
     }
 
     try {
@@ -2202,7 +2297,10 @@ function initDgisMaps() {
       }
       hideMapFallback("mapModalFallback");
     } catch (_error) {
-      setMapFallbackText("mapModalFallback", "Ошибка инициализации большой карты.");
+      setMapFallbackText(
+        "mapModalFallback",
+        "Ошибка инициализации большой карты.",
+      );
     }
 
     ensureMapLayers();
@@ -2212,7 +2310,10 @@ function initDgisMaps() {
 }
 
 function refreshModalMapSize() {
-  if (!modalMapInstance || typeof modalMapInstance.invalidateSize !== "function") {
+  if (
+    !modalMapInstance ||
+    typeof modalMapInstance.invalidateSize !== "function"
+  ) {
     return;
   }
   setTimeout(() => {
@@ -2257,7 +2358,11 @@ async function handleRegister() {
   const email = document.getElementById("loginEmail")?.value?.trim();
   const password = document.getElementById("loginPassword")?.value ?? "";
   if (!email || !password) {
-    setStatus("authStatus", "Для регистрации заполните email и пароль", "error");
+    setStatus(
+      "authStatus",
+      "Для регистрации заполните email и пароль",
+      "error",
+    );
     return;
   }
   if (password.length < 8) {
@@ -2371,7 +2476,9 @@ function updateDocumentFiltersVisibility() {
   const houseGroupMeta = document.getElementById("docHouseGroupMeta");
   const isCourtMode = currentDocumentsMode === "court";
   const showHouseGroups =
-    !isCourtMode && currentAreaScope === "Дом" && currentDocumentType === "application";
+    !isCourtMode &&
+    currentAreaScope === "Дом" &&
+    currentDocumentType === "application";
 
   if (docScopeTabs) {
     docScopeTabs.hidden = isCourtMode;
@@ -2384,7 +2491,9 @@ function updateDocumentFiltersVisibility() {
   }
 
   if (houseGroupMeta) {
-    houseGroupMeta.textContent = getHouseDocumentGroupMeta(currentHouseDocumentGroup);
+    houseGroupMeta.textContent = getHouseDocumentGroupMeta(
+      currentHouseDocumentGroup,
+    );
   }
 }
 
@@ -2393,7 +2502,12 @@ async function fetchNearestDistrictCourt(address) {
   return apiRequest(`/district-courts/nearest?${params.toString()}`);
 }
 
-async function fetchUsefulTipsList(scope, page = 1, limit = 12, sort = "newest") {
+async function fetchUsefulTipsList(
+  scope,
+  page = 1,
+  limit = 12,
+  sort = "newest",
+) {
   const params = new URLSearchParams();
   if (scope) {
     params.set("area_scope", scope);
@@ -2521,14 +2635,19 @@ function renderDocuments(items) {
           }
         }
       } catch (error) {
-        setStatus("docsStatus", error.message || "Не удалось получить файл", "error");
+        setStatus(
+          "docsStatus",
+          error.message || "Не удалось получить файл",
+          "error",
+        );
       }
     });
   });
 }
 
 function setDocumentsMode(mode) {
-  const normalizedMode = mode === "claim" || mode === "court" ? mode : "application";
+  const normalizedMode =
+    mode === "claim" || mode === "court" ? mode : "application";
   currentDocumentsMode = normalizedMode;
   if (normalizedMode !== "court") {
     currentDocumentType = normalizedMode;
@@ -2540,7 +2659,10 @@ function setDocumentsMode(mode) {
   const districtCourtPanel = document.getElementById("districtCourtPanel");
 
   docTypeTabs?.querySelectorAll("button[data-doc-mode]").forEach((button) => {
-    button.classList.toggle("active", button.dataset.docMode === normalizedMode);
+    button.classList.toggle(
+      "active",
+      button.dataset.docMode === normalizedMode,
+    );
   });
 
   const isCourtMode = normalizedMode === "court";
@@ -2643,17 +2765,24 @@ function ensureDistrictCourtMap() {
         });
       }
       if (!districtCourtMapLayer) {
-        districtCourtMapLayer = window.DG.featureGroup().addTo(districtCourtMapInstance);
+        districtCourtMapLayer = window.DG.featureGroup().addTo(
+          districtCourtMapInstance,
+        );
       }
       if (!districtCourtRouteLayer) {
-        districtCourtRouteLayer = window.DG.featureGroup().addTo(districtCourtMapInstance);
+        districtCourtRouteLayer = window.DG.featureGroup().addTo(
+          districtCourtMapInstance,
+        );
       }
       hideMapFallback("districtCourtMapFallback");
       window.setTimeout(() => {
         districtCourtMapInstance?.invalidateSize?.();
       }, 80);
     } catch (_error) {
-      setMapFallbackText("districtCourtMapFallback", "Не удалось инициализировать карту суда.");
+      setMapFallbackText(
+        "districtCourtMapFallback",
+        "Не удалось инициализировать карту суда.",
+      );
     }
   });
 }
@@ -2668,7 +2797,12 @@ function renderDistrictCourtMarkers(result) {
     districtCourtRouteLayer.clearLayers();
   }
 
-  if (!result || !districtCourtMapLayer || !districtCourtMapInstance || !window.DG) {
+  if (
+    !result ||
+    !districtCourtMapLayer ||
+    !districtCourtMapInstance ||
+    !window.DG
+  ) {
     return;
   }
 
@@ -2719,7 +2853,10 @@ function renderDistrictCourtMarkers(result) {
     [address.lat, address.lon],
     [court.lat, court.lon],
   );
-  districtCourtMapInstance.fitBounds(bounds, { padding: [52, 52], maxZoom: 15 });
+  districtCourtMapInstance.fitBounds(bounds, {
+    padding: [52, 52],
+    maxZoom: 15,
+  });
 }
 
 function isFiniteDistrictCourtPoint(lat, lon) {
@@ -2769,18 +2906,25 @@ function getDistrictCourtDistanceKm(address, court) {
   return `${distance.toFixed(distance < 10 ? 1 : 0)} км`;
 }
 
-
 async function handleDistrictCourtSearch() {
   const input = document.getElementById("districtCourtAddressInput");
   const rawAddress = input?.value?.trim() || "";
 
   if (!rawAddress) {
-    setStatus("districtCourtStatus", "Введите адрес для поиска районного суда.", "error");
+    setStatus(
+      "districtCourtStatus",
+      "Введите адрес для поиска районного суда.",
+      "error",
+    );
     return;
   }
 
   districtCourtState.loading = true;
-  setStatus("districtCourtStatus", "Определяем адрес и районный суд...", "info");
+  setStatus(
+    "districtCourtStatus",
+    "Определяем адрес и районный суд...",
+    "info",
+  );
 
   try {
     const response = await fetchNearestDistrictCourt(rawAddress);
@@ -2954,9 +3098,13 @@ function updateManagementCompaniesControls() {
   const moreBtn = document.getElementById("managementCompaniesMoreBtn");
   if (!moreBtn) return;
 
-  moreBtn.style.display = managementCompaniesState.hasMore ? "inline-flex" : "none";
+  moreBtn.style.display = managementCompaniesState.hasMore
+    ? "inline-flex"
+    : "none";
   moreBtn.disabled = managementCompaniesState.loading;
-  moreBtn.textContent = managementCompaniesState.loading ? "Загрузка..." : "Загрузить ещё";
+  moreBtn.textContent = managementCompaniesState.loading
+    ? "Загрузка..."
+    : "Загрузить ещё";
 }
 
 async function loadDocuments() {
@@ -2966,7 +3114,11 @@ async function loadDocuments() {
     renderDocuments(items);
     setStatus("docsStatus", "", "info");
   } catch (error) {
-    setStatus("docsStatus", error.message || "Ошибка загрузки документов", "error");
+    setStatus(
+      "docsStatus",
+      error.message || "Ошибка загрузки документов",
+      "error",
+    );
   }
 }
 
@@ -2979,10 +3131,14 @@ async function loadUsefulTips(scope = usefulTipsState.scope) {
   try {
     if (scope) {
       const response = await fetchUsefulTipsList(scope, 1, 24, "popular");
-      usefulTipsState.items = Array.isArray(response?.items) ? response.items : [];
+      usefulTipsState.items = Array.isArray(response?.items)
+        ? response.items
+        : [];
     } else {
       const response = await fetchPopularUsefulTips(null, 6);
-      usefulTipsState.items = Array.isArray(response?.items) ? response.items : [];
+      usefulTipsState.items = Array.isArray(response?.items)
+        ? response.items
+        : [];
     }
 
     renderUsefulTipsCards(usefulTipsState.items, "usefulTipsGrid");
@@ -2990,7 +3146,11 @@ async function loadUsefulTips(scope = usefulTipsState.scope) {
   } catch (error) {
     usefulTipsState.items = [];
     renderUsefulTipsCards([], "usefulTipsGrid");
-    setStatus("usefulTipsStatus", error.message || "Ошибка загрузки советов", "error");
+    setStatus(
+      "usefulTipsStatus",
+      error.message || "Ошибка загрузки советов",
+      "error",
+    );
   } finally {
     usefulTipsState.loading = false;
   }
@@ -3025,7 +3185,10 @@ async function loadManagementCompanies(reset = false) {
     "info",
   );
   try {
-    const data = await fetchManagementCompanies(managementCompaniesState.nextPage, 20);
+    const data = await fetchManagementCompanies(
+      managementCompaniesState.nextPage,
+      20,
+    );
     const incomingItems = Array.isArray(data?.items) ? data.items : [];
     managementCompaniesState.totalPages = Number(data?.total_pages) || 1;
     managementCompaniesState.items = mergeUniqueManagementCompanies(
@@ -3068,7 +3231,11 @@ async function loadTariffs(forceReload = false) {
     renderTariffs(tariffsState.items);
     setStatus("tariffsStatus", "", "info");
   } catch (error) {
-    setStatus("tariffsStatus", error.message || "Ошибка загрузки тарифов", "error");
+    setStatus(
+      "tariffsStatus",
+      error.message || "Ошибка загрузки тарифов",
+      "error",
+    );
   } finally {
     tariffsState.loading = false;
   }
@@ -3103,18 +3270,30 @@ async function loadEmergencyServices(forceReload = false) {
 function initDocumentsBindings() {
   const openDocsBtn = document.getElementById("openDocsPage");
   const openDocsFooter = document.getElementById("openDocsFooter");
-  const openManagementCompanies = document.getElementById("openManagementCompanies");
+  const openManagementCompanies = document.getElementById(
+    "openManagementCompanies",
+  );
   const openTariffs = document.getElementById("openTariffs");
   const openTariffsFooter = document.getElementById("openTariffsFooter");
-  const openEmergencyServices = document.getElementById("openEmergencyServices");
-  const managementCompaniesMoreBtn = document.getElementById("managementCompaniesMoreBtn");
-  const managementCompaniesSentinel = document.getElementById("managementCompaniesSentinel");
-  const managementCompaniesModal = document.getElementById("managementCompaniesModal");
+  const openEmergencyServices = document.getElementById(
+    "openEmergencyServices",
+  );
+  const managementCompaniesMoreBtn = document.getElementById(
+    "managementCompaniesMoreBtn",
+  );
+  const managementCompaniesSentinel = document.getElementById(
+    "managementCompaniesSentinel",
+  );
+  const managementCompaniesModal = document.getElementById(
+    "managementCompaniesModal",
+  );
   const docTypeTabs = document.getElementById("docTypeTabs");
   const docScopeTabs = document.getElementById("docScopeTabs");
   const docHouseGroupTabs = document.getElementById("docHouseGroupTabs");
   const districtCourtForm = document.getElementById("districtCourtForm");
-  const districtCourtInput = document.getElementById("districtCourtAddressInput");
+  const districtCourtInput = document.getElementById(
+    "districtCourtAddressInput",
+  );
 
   const openDocs = (event) => {
     event.preventDefault();
@@ -3141,7 +3320,9 @@ function initDocumentsBindings() {
     openModal("emergencyServicesModal");
     loadEmergencyServices();
   });
-  managementCompaniesMoreBtn?.addEventListener("click", () => loadManagementCompanies(false));
+  managementCompaniesMoreBtn?.addEventListener("click", () =>
+    loadManagementCompanies(false),
+  );
 
   if (
     managementCompaniesSentinel &&
@@ -3153,7 +3334,11 @@ function initDocumentsBindings() {
         const entry = entries[0];
         if (!entry?.isIntersecting) return;
         if (!managementCompaniesModal.classList.contains("active")) return;
-        if (!managementCompaniesState.hasMore || managementCompaniesState.loading) return;
+        if (
+          !managementCompaniesState.hasMore ||
+          managementCompaniesState.loading
+        )
+          return;
         loadManagementCompanies(false);
       },
       { root: managementCompaniesModal, threshold: 0.1 },
@@ -3167,33 +3352,38 @@ function initDocumentsBindings() {
     });
   });
 
-  docScopeTabs?.querySelectorAll("button[data-area-scope]").forEach((button) => {
-    button.addEventListener("click", () => {
-      if (button.disabled) return;
-      docScopeTabs
-        .querySelectorAll("button[data-area-scope]")
-        .forEach((b) => b.classList.remove("active"));
-      button.classList.add("active");
-      currentAreaScope = button.dataset.areaScope;
-      updateDocumentFiltersVisibility();
-      if (currentDocumentsMode !== "court") {
-        loadDocuments();
-      }
+  docScopeTabs
+    ?.querySelectorAll("button[data-area-scope]")
+    .forEach((button) => {
+      button.addEventListener("click", () => {
+        if (button.disabled) return;
+        docScopeTabs
+          .querySelectorAll("button[data-area-scope]")
+          .forEach((b) => b.classList.remove("active"));
+        button.classList.add("active");
+        currentAreaScope = button.dataset.areaScope;
+        updateDocumentFiltersVisibility();
+        if (currentDocumentsMode !== "court") {
+          loadDocuments();
+        }
+      });
     });
-  });
 
-  docHouseGroupTabs?.querySelectorAll("button[data-house-group]").forEach((button) => {
-    button.addEventListener("click", () => {
-      docHouseGroupTabs
-        .querySelectorAll("button[data-house-group]")
-        .forEach((b) => b.classList.remove("active"));
-      button.classList.add("active");
-      currentHouseDocumentGroup = button.dataset.houseGroup || "housing_inspection";
-      if (currentDocumentsMode !== "court" && currentAreaScope === "Дом") {
-        loadDocuments();
-      }
+  docHouseGroupTabs
+    ?.querySelectorAll("button[data-house-group]")
+    .forEach((button) => {
+      button.addEventListener("click", () => {
+        docHouseGroupTabs
+          .querySelectorAll("button[data-house-group]")
+          .forEach((b) => b.classList.remove("active"));
+        button.classList.add("active");
+        currentHouseDocumentGroup =
+          button.dataset.houseGroup || "housing_inspection";
+        if (currentDocumentsMode !== "court" && currentAreaScope === "Дом") {
+          loadDocuments();
+        }
+      });
     });
-  });
 
   districtCourtForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -3219,7 +3409,9 @@ function initUsefulTipsBindings() {
   });
 
   nextBtn?.addEventListener("click", () => {
-    const pageCount = Math.ceil(usefulTipsState.items.length / usefulTipsState.pageSize);
+    const pageCount = Math.ceil(
+      usefulTipsState.items.length / usefulTipsState.pageSize,
+    );
     if (usefulTipsState.currentPage >= pageCount - 1) return;
     usefulTipsState.currentPage += 1;
     renderUsefulTipsCards(usefulTipsState.items, "usefulTipsGrid");
@@ -3313,14 +3505,22 @@ async function handleQuestionSubmit() {
       name,
       question: text,
     });
-    setStatus("questionStatus", "Вопрос отправлен. Мы рассмотрим обращение и вернемся с ответом.", "success");
+    setStatus(
+      "questionStatus",
+      "Вопрос отправлен. Мы рассмотрим обращение и вернемся с ответом.",
+      "success",
+    );
     const nameInput = document.getElementById("questionName");
     const textInput = document.getElementById("questionText");
     if (nameInput) nameInput.value = "";
     if (textInput) textInput.value = "";
     setTimeout(() => closeModal("questionModal"), 900);
   } catch (error) {
-    setStatus("questionStatus", error.message || "Не удалось отправить вопрос", "error");
+    setStatus(
+      "questionStatus",
+      error.message || "Не удалось отправить вопрос",
+      "error",
+    );
     if (error.message === "Чтобы отправить вопрос, нужно войти в аккаунт.") {
       closeModal("questionModal");
       openModal("loginModal");
@@ -3368,7 +3568,9 @@ function getCalendarMonthTitle(date) {
   return new Intl.DateTimeFormat("ru-RU", {
     month: "long",
     year: "numeric",
-  }).format(date).replace(/^\p{L}/u, (m) => m.toUpperCase());
+  })
+    .format(date)
+    .replace(/^\p{L}/u, (m) => m.toUpperCase());
 }
 
 function getCalendarDayTitle(date) {
@@ -3388,7 +3590,9 @@ function getCalendarDayBadge(date) {
 function getCalendarWeekdayTitle(date) {
   return new Intl.DateTimeFormat("ru-RU", {
     weekday: "long",
-  }).format(date).replace(/^\p{L}/u, (m) => m.toUpperCase());
+  })
+    .format(date)
+    .replace(/^\p{L}/u, (m) => m.toUpperCase());
 }
 
 function isSameCalendarDay(a, b) {
@@ -3437,7 +3641,8 @@ function getCalendarEventCountLabel(count) {
   const mod100 = count % 100;
 
   if (mod10 === 1 && mod100 !== 11) return `${count} заметка`;
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return `${count} заметки`;
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14))
+    return `${count} заметки`;
   return `${count} заметок`;
 }
 
@@ -3446,11 +3651,17 @@ function setCalendarCreateFormOpen(isOpen) {
   const openBtn = document.getElementById("calendarOpenCreateBtn");
   if (openBtn) {
     openBtn.textContent = "Добавить заметку";
-    openBtn.setAttribute("aria-expanded", calendarState.isCreateFormOpen ? "true" : "false");
+    openBtn.setAttribute(
+      "aria-expanded",
+      calendarState.isCreateFormOpen ? "true" : "false",
+    );
   }
 }
 
-function closeCalendarCreateModal({ resetFields = false, clearStatus = true } = {}) {
+function closeCalendarCreateModal({
+  resetFields = false,
+  clearStatus = true,
+} = {}) {
   if (clearStatus) {
     setStatus("calendarStatus", "", "info");
   }
@@ -3506,7 +3717,9 @@ function renderCalendarMeta() {
     </div>
   `;
 
-  eventsCountEl.textContent = getCalendarEventCountLabel(calendarState.dayItems.length);
+  eventsCountEl.textContent = getCalendarEventCountLabel(
+    calendarState.dayItems.length,
+  );
 }
 
 function renderCalendarGrid() {
@@ -3540,7 +3753,9 @@ function renderCalendarGrid() {
 
   for (let i = firstWeekDay - 1; i > 0; i -= 1) {
     const dayNumber = prevMonthLastDay - i + 1;
-    cells.push(`<div class="cal-d muted" aria-hidden="true"><span class="cal-d-num">${dayNumber}</span></div>`);
+    cells.push(
+      `<div class="cal-d muted" aria-hidden="true"><span class="cal-d-num">${dayNumber}</span></div>`,
+    );
   }
 
   for (let day = 1; day <= daysInMonth; day += 1) {
@@ -3551,7 +3766,8 @@ function renderCalendarGrid() {
     const hasDoneEvent = items.some((item) => item.is_done);
     const isToday = isSameCalendarDay(cellDate, today);
     const isSelected =
-      calendarState.selectedDate && isSameCalendarDay(cellDate, calendarState.selectedDate);
+      calendarState.selectedDate &&
+      isSameCalendarDay(cellDate, calendarState.selectedDate);
 
     const classNames = ["cal-d"];
     if (hasEvent) classNames.push("has-event");
@@ -3578,7 +3794,9 @@ function renderCalendarGrid() {
   const nextDaysCount = totalCells - usedCells;
 
   for (let day = 1; day <= nextDaysCount; day += 1) {
-    cells.push(`<div class="cal-d muted" aria-hidden="true"><span class="cal-d-num">${day}</span></div>`);
+    cells.push(
+      `<div class="cal-d muted" aria-hidden="true"><span class="cal-d-num">${day}</span></div>`,
+    );
   }
 
   grid.innerHTML = cells.join("");
@@ -3602,7 +3820,8 @@ function renderCalendarSelectedDayLabel() {
 
   if (!calendarState.selectedDate) {
     el.textContent = "Выберите день";
-    meta.textContent = "Выберите дату, чтобы увидеть список заметок и быстро добавить новую.";
+    meta.textContent =
+      "Выберите дату, чтобы увидеть список заметок и быстро добавить новую.";
     chip.textContent = "Выберите день";
     badge.textContent = "00";
     return;
@@ -3611,7 +3830,9 @@ function renderCalendarSelectedDayLabel() {
   const dayItems = getCalendarDayItems(calendarState.selectedDate);
   el.textContent = `Заметки на ${getCalendarDayTitle(calendarState.selectedDate)}`;
   meta.textContent = `${getCalendarWeekdayTitle(calendarState.selectedDate)} · ${getCalendarEventCountLabel(dayItems.length)}.`;
-  chip.textContent = dayItems.length ? `${dayItems.length} в плане` : "День свободен";
+  chip.textContent = dayItems.length
+    ? `${dayItems.length} в плане`
+    : "День свободен";
   badge.textContent = getCalendarDayBadge(calendarState.selectedDate);
 }
 
@@ -3722,7 +3943,8 @@ function syncCalendarMobilePanels() {
 
   panels.forEach((panel) => {
     const panelName = panel.getAttribute("data-calendar-mobile-panel");
-    const isActive = !isCompactViewport || panelName === calendarState.mobilePanel;
+    const isActive =
+      !isCompactViewport || panelName === calendarState.mobilePanel;
     panel.classList.toggle("is-active", isActive);
     panel.setAttribute("aria-hidden", isActive ? "false" : "true");
   });
@@ -3733,7 +3955,11 @@ async function loadCalendarMonth() {
     calendarState.monthItems = [];
     calendarState.dayItems = [];
     renderCalendarAll();
-    setStatus("calendarStatus", "Чтобы пользоваться календарем, войдите в аккаунт.", "info");
+    setStatus(
+      "calendarStatus",
+      "Чтобы пользоваться календарем, войдите в аккаунт.",
+      "info",
+    );
     return;
   }
 
@@ -3743,7 +3969,9 @@ async function loadCalendarMonth() {
   try {
     const range = getCalendarMonthRange(calendarState.currentDate);
     const response = await fetchCalendarNotesByRange(range.from, range.to);
-    calendarState.monthItems = Array.isArray(response?.items) ? response.items : [];
+    calendarState.monthItems = Array.isArray(response?.items)
+      ? response.items
+      : [];
     renderCalendarGrid();
 
     if (calendarState.selectedDate) {
@@ -3761,7 +3989,11 @@ async function loadCalendarMonth() {
         now.getMonth() === currentMonth &&
         now.getFullYear() === currentYear
       ) {
-        calendarState.selectedDate = new Date(currentYear, currentMonth, now.getDate());
+        calendarState.selectedDate = new Date(
+          currentYear,
+          currentMonth,
+          now.getDate(),
+        );
       } else {
         calendarState.selectedDate = new Date(currentYear, currentMonth, 1);
       }
@@ -3773,7 +4005,11 @@ async function loadCalendarMonth() {
     calendarState.monthItems = [];
     calendarState.dayItems = [];
     renderCalendarAll();
-    setStatus("calendarStatus", error.message || "Не удалось загрузить календарь", "error");
+    setStatus(
+      "calendarStatus",
+      error.message || "Не удалось загрузить календарь",
+      "error",
+    );
   } finally {
     calendarState.loadingMonth = false;
   }
@@ -3798,12 +4034,18 @@ async function loadCalendarDay() {
   try {
     const date = formatCalendarDate(calendarState.selectedDate);
     const response = await fetchCalendarNotesByDay(date);
-    calendarState.dayItems = Array.isArray(response?.items) ? response.items : [];
+    calendarState.dayItems = Array.isArray(response?.items)
+      ? response.items
+      : [];
     renderCalendarAll();
   } catch (error) {
     calendarState.dayItems = [];
     renderCalendarEventsList();
-    setStatus("calendarStatus", error.message || "Не удалось загрузить заметки за день", "error");
+    setStatus(
+      "calendarStatus",
+      error.message || "Не удалось загрузить заметки за день",
+      "error",
+    );
   } finally {
     calendarState.loadingDay = false;
     renderCalendarEventsList();
@@ -3811,7 +4053,11 @@ async function loadCalendarDay() {
 }
 
 async function selectCalendarDay(date) {
-  calendarState.selectedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  calendarState.selectedDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+  );
   if (window.innerWidth <= 640) {
     setCalendarMobilePanel("events");
   }
@@ -3843,12 +4089,20 @@ async function handleCalendarCreate() {
   }
 
   if (title.length > 120) {
-    setStatus("calendarStatus", "Название не должно превышать 120 символов", "error");
+    setStatus(
+      "calendarStatus",
+      "Название не должно превышать 120 символов",
+      "error",
+    );
     return;
   }
 
   if (description.length > 1000) {
-    setStatus("calendarStatus", "Описание не должно превышать 1000 символов", "error");
+    setStatus(
+      "calendarStatus",
+      "Описание не должно превышать 1000 символов",
+      "error",
+    );
     return;
   }
 
@@ -3864,7 +4118,11 @@ async function handleCalendarCreate() {
     await loadCalendarMonth();
     closeCalendarCreateModal({ resetFields: true, clearStatus: true });
   } catch (error) {
-    setStatus("calendarStatus", error.message || "Не удалось создать заметку", "error");
+    setStatus(
+      "calendarStatus",
+      error.message || "Не удалось создать заметку",
+      "error",
+    );
   }
 }
 
@@ -3876,7 +4134,11 @@ async function handleCalendarToggle(noteId, isDone) {
     await loadCalendarMonth();
     setStatus("calendarStatus", "", "info");
   } catch (error) {
-    setStatus("calendarStatus", error.message || "Не удалось обновить статус", "error");
+    setStatus(
+      "calendarStatus",
+      error.message || "Не удалось обновить статус",
+      "error",
+    );
   }
 }
 
@@ -3888,7 +4150,11 @@ async function handleCalendarDelete(noteId) {
     await loadCalendarMonth();
     setStatus("calendarStatus", "", "info");
   } catch (error) {
-    setStatus("calendarStatus", error.message || "Не удалось удалить заметку", "error");
+    setStatus(
+      "calendarStatus",
+      error.message || "Не удалось удалить заметку",
+      "error",
+    );
   }
 }
 
@@ -3901,57 +4167,93 @@ function initCalendarBindings() {
 
   window.addEventListener("resize", syncCalendarMobilePanels);
 
-  document.getElementById("calendarPrevBtn")?.addEventListener("click", async () => {
-    const current = calendarState.currentDate;
-    calendarState.currentDate = new Date(current.getFullYear(), current.getMonth() - 1, 1);
-    await loadCalendarMonth();
-  });
+  document
+    .getElementById("calendarPrevBtn")
+    ?.addEventListener("click", async () => {
+      const current = calendarState.currentDate;
+      calendarState.currentDate = new Date(
+        current.getFullYear(),
+        current.getMonth() - 1,
+        1,
+      );
+      await loadCalendarMonth();
+    });
 
-  document.getElementById("calendarNextBtn")?.addEventListener("click", async () => {
-    const current = calendarState.currentDate;
-    calendarState.currentDate = new Date(current.getFullYear(), current.getMonth() + 1, 1);
-    await loadCalendarMonth();
-  });
+  document
+    .getElementById("calendarNextBtn")
+    ?.addEventListener("click", async () => {
+      const current = calendarState.currentDate;
+      calendarState.currentDate = new Date(
+        current.getFullYear(),
+        current.getMonth() + 1,
+        1,
+      );
+      await loadCalendarMonth();
+    });
 
-  document.getElementById("calendarTodayBtn")?.addEventListener("click", async () => {
-    const now = new Date();
-    calendarState.currentDate = new Date(now.getFullYear(), now.getMonth(), 1);
-    calendarState.selectedDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    await loadCalendarMonth();
-  });
+  document
+    .getElementById("calendarTodayBtn")
+    ?.addEventListener("click", async () => {
+      const now = new Date();
+      calendarState.currentDate = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        1,
+      );
+      calendarState.selectedDate = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+      );
+      await loadCalendarMonth();
+    });
 
-  document.getElementById("calendarOpenCreateBtn")?.addEventListener("click", () => {
-    if (!isAuthenticated()) {
-      setStatus("calendarStatus", "Сначала войдите в аккаунт", "error");
-      openModal("loginModal");
-      return;
-    }
+  document
+    .getElementById("calendarOpenCreateBtn")
+    ?.addEventListener("click", () => {
+      if (!isAuthenticated()) {
+        setStatus("calendarStatus", "Сначала войдите в аккаунт", "error");
+        openModal("loginModal");
+        return;
+      }
 
-    if (!calendarState.selectedDate) {
-      setStatus("calendarStatus", "Сначала выберите день в календаре", "error");
-      return;
-    }
+      if (!calendarState.selectedDate) {
+        setStatus(
+          "calendarStatus",
+          "Сначала выберите день в календаре",
+          "error",
+        );
+        return;
+      }
 
-    setStatus("calendarStatus", "", "info");
-    openCalendarCreateModal();
-  });
+      setStatus("calendarStatus", "", "info");
+      openCalendarCreateModal();
+    });
 
-  document.getElementById("calendarCancelCreateBtn")?.addEventListener("click", () => {
-    closeCalendarCreateModal({ resetFields: false, clearStatus: true });
-  });
+  document
+    .getElementById("calendarCancelCreateBtn")
+    ?.addEventListener("click", () => {
+      closeCalendarCreateModal({ resetFields: false, clearStatus: true });
+    });
 
-  document.getElementById("calendarCreateModalCloseBtn")?.addEventListener("click", () => {
-    closeCalendarCreateModal({ resetFields: false, clearStatus: true });
-  });
+  document
+    .getElementById("calendarCreateModalCloseBtn")
+    ?.addEventListener("click", () => {
+      closeCalendarCreateModal({ resetFields: false, clearStatus: true });
+    });
 
-  document.getElementById("calendarNoteTitle")?.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      handleCalendarCreate();
-    }
-  });
+  document
+    .getElementById("calendarNoteTitle")
+    ?.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        handleCalendarCreate();
+      }
+    });
 
-  document.getElementById("calendarCreateBtn")?.addEventListener("click", handleCalendarCreate);
+  document
+    .getElementById("calendarCreateBtn")
+    ?.addEventListener("click", handleCalendarCreate);
 
   setCalendarCreateFormOpen(false);
   renderCalendarAll();
