@@ -889,7 +889,7 @@ function renderUsefulTipsCards(items, targetId) {
             ${outline ? `<div class="useful-tip-outline">${escapeHtml(outline)}</div>` : ""}
           </div>
           <div class="useful-tip-card-footer">
-            <span class="useful-tip-card-meta"></span>
+            <span class="useful-tip-card-meta">Актуален на ${USEFUL_TIP_RELEVANCE_DATE}</span>
             <button type="button" class="useful-tip-open-btn">Открыть</button>
           </div>
         </article>
