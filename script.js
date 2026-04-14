@@ -329,6 +329,7 @@ const usefulTipsState = {
   currentPage: 0,
   pageSize: 3,
 };
+const USEFUL_TIP_RELEVANCE_DATE = "14.04.2026";
 let allNewsObserver = null;
 let managementCompaniesObserver = null;
 let previewMapInstance = null;
@@ -832,12 +833,7 @@ function updateUsefulTipsPager(items) {
   if (subtitle) {
     subtitle.textContent = usefulTipsState.scope
       ? "Показаны советы по выбранному объекту. Листайте карточки стрелками."
-      : "Шесть самых популярных советов по квартире, дому и подъезду.";
-  }
-  if (meta) {
-    meta.textContent = usefulTipsState.scope
-      ? `${items.length} карточек • ${usefulTipsState.currentPage + 1}/${pageCount}`
-      : `${Math.min(items.length, 6)} карточек`;
+      : "Самые популярные советы по квартире, дому и подъезду.";
   }
   if (nav) {
     nav.style.display = usefulTipsState.scope ? "flex" : "none";

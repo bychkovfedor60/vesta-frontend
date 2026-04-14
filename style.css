@@ -600,7 +600,15 @@ a {
 }
 
 .useful-tip-card-meta {
-    min-height: 1px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.28rem 0.62rem;
+    border-radius: 999px;
+    background: rgba(23, 69, 30, 0.08);
+    color: rgba(23, 69, 30, 0.88);
+    font-size: 0.68rem;
+    font-weight: 600;
+    line-height: 1;
 }
 
 .useful-tip-open-btn,
